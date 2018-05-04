@@ -1,5 +1,7 @@
 package com.lab.core.trade.entity;
 
+import com.lab.core.trade.consts.OrderStateType;
+import com.lab.core.trade.consts.OrderStatusType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,4 +22,8 @@ public class Order{
     private String wlsnumber;
     //物流信息
     private String logicSpecificAddr;
+    //物流状态
+    private OrderStateType stateType;
+    //请求状态
+    private OrderStatusType statusType;
 }

@@ -43,6 +43,8 @@ public class Trade{
     private List<BoxProduct> box;
     //销售
     private Seller seller;
+    //物流状况
+    private Order order;
     //交易备注
     private String tradeMemo;
     //确认收货时间
