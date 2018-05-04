@@ -16,5 +16,10 @@
         <typeAlias type="org.wah.doraemon.utils.mybatis.handler.AccountStateHandler" alias="AccountStateHandler"/>
         <typeAlias type="org.wah.doraemon.utils.mybatis.handler.SexHandler"          alias="SexHandler"/>
         <typeAlias type="org.wah.doraemon.utils.mybatis.handler.UsingStateHandler"   alias="UsingStateHandler"/>
+        <typeAlias type="com.lab.core.trade.utils.handler.ExpressTypeHandler"        alias="ExpressTypeHandler"/>
+        <typeAlias type="com.lab.core.trade.utils.handler.PayTypeHandler"            alias="PayTypeHandler"/>
+        <typeAlias type="com.lab.core.trade.utils.handler.StatusTypeHandler"         alias="StatusTypeHandler"/>
+        <typeAlias type="com.lab.core.trade.utils.handler.OrderStatusTypeHandler"    alias="OrderStatusTypeHandler"/>
+        <typeAlias type="com.lab.core.trade.utils.handler.OrderStateTypeHandler"     alias="OrderStateTypeHandler"/>
     </typeAliases>
 </configuration>
