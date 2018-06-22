@@ -178,4 +178,16 @@
             </if>
         </if>
     </select>
+
+    <select id="findCsad" resultMap="profile">
+        SELECT p.*
+          FROM profile p,
+               wx_csad_info w
+         WHERE w.user_id = p.id
+         <if test="realName != null and realName != ''">
+             AND p.real_name LIKE CONCAT('%', ${realName}, '%')
+         </if>
+      GROUP BY p.id
+      ORDER BY p.real_name ASC
+    </select>
 </mapper>

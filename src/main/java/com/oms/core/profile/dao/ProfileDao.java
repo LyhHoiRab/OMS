@@ -53,4 +53,13 @@ public class ProfileDao{
             throw new DataAccessException(e.getMessage(), e);
         }
     }
+
+    public List<Profile> findCsad(String realName){
+        try{
+            return mapper.findCsad(realName);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
 }

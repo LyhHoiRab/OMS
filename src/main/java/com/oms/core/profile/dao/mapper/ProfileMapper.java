@@ -13,4 +13,6 @@ import java.util.List;
 public interface ProfileMapper{
 
     List<Profile> find(@Param("params") Criteria criteria);
+
+    List<Profile> findCsad(String realName);
 }
