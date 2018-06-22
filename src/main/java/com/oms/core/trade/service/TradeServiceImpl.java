@@ -95,7 +95,7 @@ public class TradeServiceImpl implements TradeService{
                                          ObjectUtils.properties(orders, "tradeId", String.class),
                                          ObjectUtils.properties(products, "id", Long.class));
 
-        if(page.getTotal() > 0){
+        if(!page.getContent().isEmpty()){
             if(logisticses == null || logisticses.isEmpty()){
                 logisticses = logisticsDao.findByIds(ObjectUtils.properties(page.getContent(), "consigneeId", Long.class));
             }
