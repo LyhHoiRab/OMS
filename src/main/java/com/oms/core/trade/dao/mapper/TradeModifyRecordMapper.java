@@ -1,6 +1,6 @@
 package com.oms.core.trade.dao.mapper;
 
-import com.oms.core.trade.entity.WechatInfo;
+import com.oms.core.trade.entity.TradeModifyRecord;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -10,9 +10,9 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface WechatInfoMapper{
+public interface TradeModifyRecordMapper{
 
-    List<WechatInfo> find(@Param("params") Criteria criteria);
+    List<TradeModifyRecord> find(@Param("params") Criteria criteria);
 
-    WechatInfo get(@Param("params") Criteria criteria);
+    Long count(@Param("params") Criteria criteria);
 }

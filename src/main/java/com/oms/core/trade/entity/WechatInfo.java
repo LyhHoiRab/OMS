@@ -11,6 +11,8 @@ import lombok.Setter;
 public class WechatInfo{
 
     private Long id;
+    //用户ID
+    private Long userId;
     //类型
     private String description;
     //微信名

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.oms.core.trade.dao.mapper.LogisticsMapper">
+<mapper namespace="com.oms.core.statistics.dao.mapper.WechatAchievementMapper">
 
     <sql id="WHERE_SQL">
         <where>
@@ -148,21 +148,19 @@
         </where>
     </sql>
 
-    <resultMap id="logistics" type="com.oms.core.trade.entity.Logistics">
-        <id     column="id"                     property="id"                   javaType="java.lang.Long"/>
-        <result column="contact_name"           property="contactName"          javaType="java.lang.String"/>
-        <result column="phone"                  property="phone"                javaType="java.lang.String"/>
-        <result column="mobile"                 property="mobile"               javaType="java.lang.String"/>
-        <result column="addr"                   property="addr"                 javaType="java.lang.String"/>
-        <result column="addr_detail"            property="addrDetail"           javaType="java.lang.String"/>
-        <result column="province"               property="province"             javaType="java.lang.String"/>
-        <result column="city"                   property="city"                 javaType="java.lang.String"/>
-        <result column="district"               property="district"             javaType="java.lang.String"/>
+    <resultMap id="achievement" type="com.oms.core.statistics.entity.WechatAchievement">
+        <result column="p_user_id" property="pUserId" javaType="java.lang.Long"/>
+        <result column="price"     property="price"   javaType="java.lang.Long"/>
+        <result column="total"     property="total"   javaType="java.lang.Long"/>
+        <result column="wx_no"     property="wxNo"    javaType="java.lang.String"/>
     </resultMap>
 
-    <select id="find" resultMap="logistics">
-        SELECT *
-          FROM logistics
+    <select id="find" resultMap="achievement">
+        SELECT SUM(price) AS price,
+               COUNT(id)  AS total,
+               p_user_id,
+               wx_no
+          FROM trade
         <if test="params != null">
             <include refid="WHERE_SQL"/>
 

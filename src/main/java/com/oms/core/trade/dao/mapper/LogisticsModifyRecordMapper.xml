@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.oms.core.trade.dao.mapper.LogisticsMapper">
+<mapper namespace="com.oms.core.trade.dao.mapper.LogisticsModifyRecordMapper">
 
     <sql id="WHERE_SQL">
         <where>
@@ -148,21 +148,36 @@
         </where>
     </sql>
 
-    <resultMap id="logistics" type="com.oms.core.trade.entity.Logistics">
-        <id     column="id"                     property="id"                   javaType="java.lang.Long"/>
-        <result column="contact_name"           property="contactName"          javaType="java.lang.String"/>
-        <result column="phone"                  property="phone"                javaType="java.lang.String"/>
-        <result column="mobile"                 property="mobile"               javaType="java.lang.String"/>
-        <result column="addr"                   property="addr"                 javaType="java.lang.String"/>
-        <result column="addr_detail"            property="addrDetail"           javaType="java.lang.String"/>
-        <result column="province"               property="province"             javaType="java.lang.String"/>
-        <result column="city"                   property="city"                 javaType="java.lang.String"/>
-        <result column="district"               property="district"             javaType="java.lang.String"/>
+    <resultMap id="record" type="com.oms.core.trade.entity.LogisticsModifyRecord">
+        <id     column="id"                    property="id"                  javaType="java.lang.Long"/>
+        <result column="trade_id"              property="tradeId"             javaType="java.lang.String"/>
+        <result column="original_kd_type"      property="originalKdType"      typeHandler="ExpressTypeHandler"/>
+        <result column="modifi_kd_type"        property="modifiKdType"        typeHandler="ExpressTypeHandler"/>
+        <result column="original_wlnumber"     property="originalWlnumber"    javaType="java.lang.String"/>
+        <result column="modifi_wlnumber"       property="modifiWlnumber"      javaType="java.lang.String"/>
+        <result column="original_country"      property="originalCountry"     javaType="java.lang.String"/>
+        <result column="modifi_country"        property="modifiCountry"       javaType="java.lang.String"/>
+        <result column="original_province"     property="originalProvince"    javaType="java.lang.String"/>
+        <result column="modifi_province"       property="modifiProvince"      javaType="java.lang.String"/>
+        <result column="original_city"         property="originalCity"        javaType="java.lang.String"/>
+        <result column="modifi_city"           property="modifiCity"          javaType="java.lang.String"/>
+        <result column="original_district"     property="originalDistrict"    javaType="java.lang.String"/>
+        <result column="modifi_district"       property="modifiDistrict"      javaType="java.lang.String"/>
+        <result column="original_addr_detail"  property="originalAddrDetail"  javaType="java.lang.String"/>
+        <result column="modifi_addr_detail"    property="modifiAddrDetail"    javaType="java.lang.String"/>
+        <result column="original_contact_name" property="originalContactName" javaType="java.lang.String"/>
+        <result column="modifi_contact_name"   property="modifiContactName"   javaType="java.lang.String"/>
+        <result column="original_phone"        property="originalPhone"       javaType="java.lang.String"/>
+        <result column="modifi_phone"          property="modifiPhone"         javaType="java.lang.String"/>
+        <result column="operator"              property="operator"            javaType="java.lang.String"/>
+        <result column="operate_time"          property="operateTime"         javaType="java.util.Date"/>
+        <result column="create_time"           property="createTime"          javaType="java.util.Date"/>
+        <result column="update_time"           property="updateTime"          javaType="java.util.Date"/>
     </resultMap>
 
-    <select id="find" resultMap="logistics">
+    <select id="find" resultMap="record">
         SELECT *
-          FROM logistics
+          FROM logistics_modifi_logs
         <if test="params != null">
             <include refid="WHERE_SQL"/>
 
@@ -183,6 +198,14 @@
             <if test="params.limit != null">
                 ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
             </if>
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        SELECT COUNT(*)
+          FROM logistics_modifi_logs
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
         </if>
     </select>
 </mapper>

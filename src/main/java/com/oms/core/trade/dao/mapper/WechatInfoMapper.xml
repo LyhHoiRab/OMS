@@ -150,6 +150,7 @@
 
     <resultMap id="wxInfo" type="com.oms.core.trade.entity.WechatInfo">
         <id     column="id"                     property="id"                   javaType="java.lang.Long"/>
+        <result column="user_id"                property="userId"               javaType="java.lang.Long"/>
         <result column="wx_name"                property="wxName"               javaType="java.lang.String"/>
         <result column="wx_no"                  property="wxNo"                 javaType="java.lang.String"/>
         <result column="description"            property="description"          javaType="java.lang.String"/>
@@ -178,6 +179,14 @@
             <if test="params.limit != null">
                 ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
             </if>
+        </if>
+    </select>
+
+    <select id="get" resultMap="wxInfo">
+        SELECT *
+          FROM wx_csad_info
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
         </if>
     </select>
 </mapper>

@@ -36,7 +36,21 @@ public class WechatInfoDao{
         }
     }
 
-    public List<WechatInfo> find(String wxName, String wxNo, List<String> sellerIds){
+    public WechatInfo getByWxNo(String wxNo){
+        try{
+            Assert.hasText(wxNo, "微信号不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("wxNo", wxNo));
+
+            return mapper.get(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public List<WechatInfo> find(String wxName, String wxNo, List<Long> sellerIds){
         try{
             Criteria criteria = new Criteria();
 

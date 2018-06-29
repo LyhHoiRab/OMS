@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.oms.core.trade.dao.mapper.LogisticsMapper">
+<mapper namespace="com.oms.core.trade.dao.mapper.TradeModifyRecordMapper">
 
     <sql id="WHERE_SQL">
         <where>
@@ -148,21 +148,28 @@
         </where>
     </sql>
 
-    <resultMap id="logistics" type="com.oms.core.trade.entity.Logistics">
-        <id     column="id"                     property="id"                   javaType="java.lang.Long"/>
-        <result column="contact_name"           property="contactName"          javaType="java.lang.String"/>
-        <result column="phone"                  property="phone"                javaType="java.lang.String"/>
-        <result column="mobile"                 property="mobile"               javaType="java.lang.String"/>
-        <result column="addr"                   property="addr"                 javaType="java.lang.String"/>
-        <result column="addr_detail"            property="addrDetail"           javaType="java.lang.String"/>
-        <result column="province"               property="province"             javaType="java.lang.String"/>
-        <result column="city"                   property="city"                 javaType="java.lang.String"/>
-        <result column="district"               property="district"             javaType="java.lang.String"/>
+    <resultMap id="record" type="com.oms.core.trade.entity.TradeModifyRecord">
+        <id     column="id"                    property="id"                  javaType="java.lang.Long"/>
+        <result column="trade_id"              property="tradeId"             javaType="java.lang.String"/>
+        <result column="original_price"        property="originalPrice"       javaType="java.lang.Long"/>
+        <result column="modifi_price"          property="modifiPrice"         javaType="java.lang.Long"/>
+        <result column="original_pay_type"     property="originalPayType"     typeHandler="PayTypeHandler"/>
+        <result column="modifi_pay_type"       property="modifiPayType"       typeHandler="PayTypeHandler"/>
+        <result column="modifi_prepaid_fee"    property="modifiPrepaidFee"    javaType="java.lang.Long"/>
+        <result column="original_prepaid_fee"  property="originalPrepaidFee"  javaType="java.lang.Long"/>
+        <result column="original_memo"         property="originalMemo"        javaType="java.lang.String"/>
+        <result column="modifi_memo"           property="modifiMemo"          javaType="java.lang.String"/>
+        <result column="original_date_created" property="originalDateCreated" javaType="java.util.Date"/>
+        <result column="modifi_date_created"   property="modifiDateCreated"   javaType="java.util.Date"/>
+        <result column="operator"              property="operator"            javaType="java.lang.String"/>
+        <result column="operate_time"          property="operateTime"         javaType="java.util.Date"/>
+        <result column="create_time"           property="createTime"          javaType="java.util.Date"/>
+        <result column="update_time"           property="updateTime"          javaType="java.util.Date"/>
     </resultMap>
 
-    <select id="find" resultMap="logistics">
+    <select id="find" resultMap="record">
         SELECT *
-          FROM logistics
+          FROM trade_modifi_logs
         <if test="params != null">
             <include refid="WHERE_SQL"/>
 
@@ -183,6 +190,14 @@
             <if test="params.limit != null">
                 ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
             </if>
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        SELECT COUNT(*)
+          FROM trade_modifi_logs
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
         </if>
     </select>
 </mapper>

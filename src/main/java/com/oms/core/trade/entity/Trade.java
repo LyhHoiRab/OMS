@@ -36,6 +36,10 @@ public class Trade{
     private Long totalFee;
     //订单预付
     private Long prepaidFee;
+    //代收金额
+    private Long collectFee;
+    //拒收金额
+    private Long rejectFee;
     //快递类型
     private ExpressType expressType;
     //微信号
@@ -68,4 +72,49 @@ public class Trade{
     private Date dateCreated;
     //更新时间
     private Date lastUpdated;
+
+    public Long getPrice(){
+        return price == null ? 0 : price / 100;
+    }
+
+    public Long getTotalFee(){
+        return totalFee == null ? 0 : totalFee / 100;
+    }
+
+    public Long getPrepaidFee(){
+        return prepaidFee == null ? 0 : prepaidFee / 100;
+    }
+
+    public Long getCollectFee(){
+        switch(payType){
+            case OFFLINE_CASH:
+            case OFFLINE_ALIPAY:
+            case OFFLINE_WXPAY:
+            case OFFLINE_WXQRCODEPAY:
+            case OFFLINE_PSBC_PAY:
+            case OFFLINE_ABC_PAY:
+                return (collectFee = 0L);
+
+            case OFFLINE_ALIPAY_PREPAID:
+            case OFFLINE_WXPAY_PREPAID:
+            case OFFLINE_WXQRCODEPAY_PREPAID:
+            case OFFLINE_PSBC_PREPAID:
+            case OFFLINE_ABC_PREPAID:
+                return (collectFee = getPrepaidFee() - getPrepaidFee());
+
+            default:
+                return (collectFee = 0L);
+        }
+    }
+
+    public Long getRejectFee(){
+        switch(status){
+            case FAIL:
+            case UNUSUAL:
+                return (rejectFee = getPrepaidFee() - getPrepaidFee());
+
+            default:
+                return (rejectFee = 0L);
+        }
+    }
 }
