@@ -1,17 +1,16 @@
 package com.oms.commons.utils.editor;
 
+import com.oms.core.trade.consts.ExpressType;
 import org.apache.commons.lang3.StringUtils;
-import org.wah.doraemon.entity.consts.Sex;
 
 import java.beans.PropertyEditorSupport;
 
-public class SexEditor extends PropertyEditorSupport{
+public class ExpressEditor extends PropertyEditorSupport{
 
     @Override
     public void setAsText(String text) throws IllegalArgumentException{
-        if(!StringUtils.isBlank(text)){
-            int id = Integer.parseInt(text);
-            setValue(Sex.getById(id));
+        if(StringUtils.isNotBlank(text)){
+            setValue(ExpressType.getById(Integer.parseInt(text)));
         }
     }
 }

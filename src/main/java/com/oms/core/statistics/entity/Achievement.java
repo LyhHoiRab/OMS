@@ -1,26 +1,18 @@
 package com.oms.core.statistics.entity;
 
-import com.oms.core.profile.entity.Profile;
-import com.oms.core.trade.entity.WechatInfo;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-public class SellerAchievement{
+public class Achievement{
 
-    //销售ID
-    private Long pUserId;
-    //销售
-    private Profile seller;
     //总销售额
     private Long price;
     //订单数
     private Long total;
-    //下单微信
-    private List<WechatInfo> wechatInfos;
+    //标题
+    private String title;
     //付款类型统计
     private PayTypeStatistics cashStatistics;
     private PayTypeStatistics alipayStatistics;

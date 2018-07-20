@@ -147,7 +147,8 @@ public class TradeDao{
         }
     }
 
-    public Page<Trade> pageByStatusFailAndUnusual(PageRequest pageRequest, String wxno, String tradeId, List<Long> sellers, Date minDateCreated, Date maxDateCreated){
+    public Page<Trade> pageByStatusFailAndUnusual(PageRequest pageRequest, String wxno, String tradeId, List<Long> sellers,
+                                                  Date minDateCreated, Date maxDateCreated, List<String> tradeIds, ExpressType express){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -179,6 +180,12 @@ public class TradeDao{
             }
             if(sellers != null && !sellers.isEmpty()){
                 criteria.and(Restrictions.in("pUserId", sellers));
+            }
+            if(tradeIds != null && !tradeIds.isEmpty()){
+                criteria.and(Restrictions.in("tradeId", tradeIds));
+            }
+            if(express != null){
+                criteria.and(Restrictions.eq("kdType", express.getId()));
             }
 
             List<Trade> list  = mapper.find(criteria);
@@ -248,6 +255,89 @@ public class TradeDao{
             }
             if(boxIds != null && !boxIds.isEmpty()){
                 criteria.and(Restrictions.in("mineScBoxId", boxIds));
+            }
+
+            return mapper.find(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public List<Trade> findByAppointDeliveryTimeNull(String wxno, String tradeId, List<Long> sellers, Date minDateCreated,
+                                                     Date maxDateCreated){
+        try{
+            Criteria criteria = new Criteria();
+
+            criteria.sort(Restrictions.desc("dateCreated"));
+
+            criteria.and(Restrictions.eq("type", TradeType.CUSTOMIZE.getId()));
+            criteria.and(Restrictions.isNull("appointDeliveryTime"));
+            criteria.and(Restrictions.eq("status", StatusType.WATI_FOR_SENDING.getId()));
+
+            if(StringUtils.isNotBlank(wxno)){
+                criteria.and(Restrictions.like("wxNo", wxno));
+            }
+            if(StringUtils.isNotBlank(tradeId)){
+                criteria.and(Restrictions.like("tradeId", tradeId));
+            }
+            if(minDateCreated != null){
+                minDateCreated = DateUtils.firstTimeOfDay(minDateCreated);
+
+                criteria.and(Restrictions.ge("dateCreated", minDateCreated));
+            }
+            if(maxDateCreated != null){
+                maxDateCreated = DateUtils.lastTimeOfDay(maxDateCreated);
+
+                criteria.and(Restrictions.le("dateCreated", maxDateCreated));
+            }
+            if(sellers != null && !sellers.isEmpty()){
+                criteria.and(Restrictions.in("pUserId", sellers));
+            }
+
+            return mapper.find(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public List<Trade> findByStatusFailAndUnusual(String wxno, String tradeId, List<Long> sellers, Date minDateCreated,
+                                                  Date maxDateCreated, List<String> tradeIds, ExpressType express){
+        try{
+            Criteria criteria = new Criteria();
+
+            criteria.sort(Restrictions.desc("dateCreated"));
+
+            criteria.and(Restrictions.eq("type", TradeType.CUSTOMIZE.getId()));
+            criteria.and(Restrictions.isNull("appointDeliveryTime"));
+            criteria.and(Restrictions.or(Restrictions.eq("status", StatusType.FAIL.getId()),
+                    Restrictions.eq("status", StatusType.UNUSUAL.getId())));
+
+            if(StringUtils.isNotBlank(wxno)){
+                criteria.and(Restrictions.like("wxNo", wxno));
+            }
+            if(StringUtils.isNotBlank(tradeId)){
+                criteria.and(Restrictions.like("tradeId", tradeId));
+            }
+            if(minDateCreated != null){
+                minDateCreated = DateUtils.firstTimeOfDay(minDateCreated);
+
+                criteria.and(Restrictions.ge("dateCreated", minDateCreated));
+            }
+            if(maxDateCreated != null){
+                maxDateCreated = DateUtils.lastTimeOfDay(maxDateCreated);
+
+                criteria.and(Restrictions.le("dateCreated", maxDateCreated));
+            }
+            if(sellers != null && !sellers.isEmpty()){
+                criteria.and(Restrictions.in("pUserId", sellers));
+            }
+            if(tradeIds != null && !tradeIds.isEmpty()){
+                criteria.and(Restrictions.in("tradeId", tradeIds));
+            }
+            if(express != null){
+                criteria.and(Restrictions.eq("kdType", express.getId()));
             }
 
             return mapper.find(criteria);

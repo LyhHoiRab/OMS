@@ -26,10 +26,10 @@ public class WebMvcConfig extends WebMvcConfigurationSupport{
 
     @Override
     public void addInterceptors(InterceptorRegistry registry){
-        registry.addInterceptor(getOptionsInterceptor())
-                .pathMatcher(new AntPathMatcher())
-                .addPathPatterns("/**")
-                .order(-1);
+//        registry.addInterceptor(getOptionsInterceptor())
+//                .pathMatcher(new AntPathMatcher())
+//                .addPathPatterns("/**")
+//                .order(-1);
     }
 
     @Override

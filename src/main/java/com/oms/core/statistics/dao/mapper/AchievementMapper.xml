@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.oms.core.profile.dao.mapper.ProfileMapper">
+<mapper namespace="com.oms.core.statistics.dao.mapper.AchievementMapper">
 
     <sql id="WHERE_SQL">
         <where>
@@ -148,14 +148,15 @@
         </where>
     </sql>
 
-    <resultMap id="profile" type="com.oms.core.profile.entity.Profile">
-        <id     column="id"                     property="id"                   javaType="java.lang.Long"/>
-        <result column="real_name"              property="realName"             javaType="java.lang.String"/>
+    <resultMap id="achievement" type="com.oms.core.statistics.entity.Achievement">
+        <result column="price"     property="price"   javaType="java.lang.Long"/>
+        <result column="total"     property="total"   javaType="java.lang.Long"/>
     </resultMap>
 
-    <select id="find" resultMap="profile">
-        SELECT *
-          FROM profile
+    <select id="find" resultMap="achievement">
+        SELECT SUM(price) AS price,
+               COUNT(id)  AS total
+          FROM trade
         <if test="params != null">
             <include refid="WHERE_SQL"/>
 
@@ -179,23 +180,19 @@
         </if>
     </select>
 
-    <select id="findCsad" resultMap="profile">
-        SELECT p.*
-          FROM profile p,
-               wx_csad_info w
-         WHERE w.user_id = p.id
-         <if test="realName != null and realName != ''">
-             AND p.real_name LIKE CONCAT('%', ${realName}, '%')
-         </if>
-      GROUP BY p.id
-      ORDER BY p.real_name ASC
-    </select>
-
-    <select id="count" resultType="java.lang.Long">
-        SELECT COUNT(*)
-          FROM profile
+    <select id="get" resultMap="achievement">
+        SELECT SUM(price) AS price,
+               COUNT(id)  AS total
+          FROM trade
         <if test="params != null">
             <include refid="WHERE_SQL"/>
+
+            <if test="params.groups != null and params.groups.size > 0">
+                GROUP BY
+                <foreach collection="params.groups" item="group" separator=",">
+                    ${group.property}
+                </foreach>
+            </if>
         </if>
     </select>
 </mapper>

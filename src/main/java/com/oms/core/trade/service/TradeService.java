@@ -23,10 +23,17 @@ public interface TradeService{
 
     Page<Trade> pageByStatusFailAndUnusual(PageRequest pageRequest, String wxno, String tradeId, PayType payType,
                                            String sellerName, Date minDateCreated, Date maxDateCreated, String contactName,
-                                           String phone);
+                                           String phone, String wlnumber, ExpressType express);
 
     XSSFWorkbook export(String wxno, String tradeId, ExpressType express, PayType payType, Long prepaidFee, Long price,
                         Date minDateCreated, Date maxDateCreated, Date minAppointDeliveryTime, Date maxAppointDeliveryTime,
                         String contactName, String phone, String province, String city, String district, String sellerName,
                         String wlnumber, String prodName);
+
+    XSSFWorkbook exportByAppointDeliveryTimeNull(String wxno, String tradeId, PayType payType, String sellerName,
+                                                 Date minDateCreated, Date maxDateCreated, String contactName, String phone);
+
+    XSSFWorkbook exportByStatusFailAndUnusual(String wxno, String tradeId, PayType payType, String sellerName, Date minDateCreated,
+                                              Date maxDateCreated, String contactName, String phone, String wlnumber,
+                                              ExpressType express);
 }

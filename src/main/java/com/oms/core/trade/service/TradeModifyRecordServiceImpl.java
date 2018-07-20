@@ -4,6 +4,7 @@ import com.oms.core.trade.dao.TradeModifyRecordDao;
 import com.oms.core.trade.entity.TradeModifyRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
@@ -11,6 +12,7 @@ import org.wah.doraemon.security.request.PageRequest;
 import java.util.Date;
 
 @Service
+@Transactional(readOnly = true)
 public class TradeModifyRecordServiceImpl implements TradeModifyRecordService{
 
     @Autowired

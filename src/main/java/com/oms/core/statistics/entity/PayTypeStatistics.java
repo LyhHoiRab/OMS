@@ -26,8 +26,6 @@ public class PayTypeStatistics{
     private Long totalFee;
     //订单预付
     private Long prepaidFee;
-    //代收金额
-    private Long collectFee;
 
     public Long getPrice(){
         return price == null ? 0 : price / 100;
@@ -43,23 +41,25 @@ public class PayTypeStatistics{
 
     public Long getCollectFee(){
         switch(payType){
-            case OFFLINE_CASH:
             case OFFLINE_ALIPAY:
             case OFFLINE_WXPAY:
             case OFFLINE_WXQRCODEPAY:
             case OFFLINE_PSBC_PAY:
             case OFFLINE_ABC_PAY:
-                return (collectFee = 0L);
+                return 0L;
 
             case OFFLINE_ALIPAY_PREPAID:
             case OFFLINE_WXPAY_PREPAID:
             case OFFLINE_WXQRCODEPAY_PREPAID:
             case OFFLINE_PSBC_PREPAID:
             case OFFLINE_ABC_PREPAID:
-                return (collectFee = getPrepaidFee() - getPrepaidFee());
+                return (getPrice() - getPrepaidFee());
+
+            case OFFLINE_CASH:
+                return getPrice();
 
             default:
-                return (collectFee = 0L);
+                return 0L;
         }
     }
 }

@@ -1,6 +1,6 @@
-package com.oms.core.profile.dao.mapper;
+package com.oms.core.product.dao.mapper;
 
-import com.oms.core.profile.entity.Profile;
+import com.oms.core.product.entity.Item;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -10,11 +10,15 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface ProfileMapper{
+public interface ItemMapper{
 
-    List<Profile> find(@Param("params") Criteria criteria);
+    void save(Item item);
 
-    List<Profile> findCsad(String realName);
+    void update(Item item);
+
+    Item get(@Param("params") Criteria criteria);
+
+    List<Item> find(@Param("params") Criteria criteria);
 
     Long count(@Param("params") Criteria criteria);
 }

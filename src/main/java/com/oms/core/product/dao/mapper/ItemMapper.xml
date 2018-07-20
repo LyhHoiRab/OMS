@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.oms.core.profile.dao.mapper.ProfileMapper">
+<mapper namespace="com.oms.core.product.dao.mapper.ItemMapper">
 
     <sql id="WHERE_SQL">
         <where>
@@ -148,14 +148,78 @@
         </where>
     </sql>
 
-    <resultMap id="profile" type="com.oms.core.profile.entity.Profile">
-        <id     column="id"                     property="id"                   javaType="java.lang.Long"/>
-        <result column="real_name"              property="realName"             javaType="java.lang.String"/>
+    <resultMap id="item" type="com.oms.core.product.entity.Item">
+        <id     column="id"           property="id"          javaType="java.lang.Long"/>
+        <result column="item_code"    property="itemCode"    javaType="java.lang.String"/>
+        <result column="item_name"    property="itemName"    javaType="java.lang.String"/>
+        <result column="item_spec"    property="itemSpec"    javaType="java.lang.String"/>
+        <result column="num"          property="num"         javaType="java.lang.Integer"/>
+        <result column="sell_num"     property="sellNum"     javaType="java.lang.Integer"/>
+        <result column="is_check"     property="isCheck"     javaType="java.lang.Boolean"/>
+        <result column="date_created" property="dateCreated" javaType="java.util.Date"/>
+        <result column="last_updated" property="lastUpdated" javaType="java.util.Date"/>
     </resultMap>
 
-    <select id="find" resultMap="profile">
+    <insert id="save">
+        INSERT
+          INTO nine_lab_pitem (
+               item_code,
+               item_name,
+               item_spec,
+               num,
+               sell_num,
+               is_check,
+               date_created
+          ) VALUE (
+               #{itemCode,    jdbcType=VARCHAR},
+               #{itemName,    jdbcType=VARCHAR},
+               #{itemSpec,    jdbcType=VARCHAR},
+               #{num,         jdbcType=INTEGER},
+               #{sellNum,     jdbcType=INTEGER},
+               #{isCheck,     jdbcType=BOOLEAN},
+               #{dateCreated, jdbcType=TIMESTAMP}
+          )
+    </insert>
+
+    <update id="update">
+        UPDATE nine_lab_pitem
+         <set>
+             <if test="itemCode != null and itemCode != ''">
+                 item_code = #{itemCode, jdbcType=VARCHAR},
+             </if>
+             <if test="itemName != null and itemName != ''">
+                 item_name = #{itemName, jdbcType=VARCHAR},
+             </if>
+             <if test="itemSpec != null and itemSpec != ''">
+                 item_spec = #{itemSpec, jdbcType=VARCHAR},
+             </if>
+             <if test="num != null">
+                 num = #{num, jdbcType=INTEGER},
+             </if>
+             <if test="sellNum != null">
+                 sell_num = #{sellNum, jdbcType=INTEGER},
+             </if>
+             <if test="isCheck != null">
+                 is_check = #{isCheck, jdbcType=BOOLEAN},
+             </if>
+             <if test="dateCreated != null">
+                 date_created = #{dateCreated, jdbcType=TIMESTAMP},
+             </if>
+         </set>
+          WHERE id = #{id}
+    </update>
+
+    <select id="get" resultMap="item">
         SELECT *
-          FROM profile
+          FROM nine_lab_pitem
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+        </if>
+    </select>
+
+    <select id="find" resultMap="item">
+        SELECT *
+          FROM nine_lab_pitem
         <if test="params != null">
             <include refid="WHERE_SQL"/>
 
@@ -179,21 +243,9 @@
         </if>
     </select>
 
-    <select id="findCsad" resultMap="profile">
-        SELECT p.*
-          FROM profile p,
-               wx_csad_info w
-         WHERE w.user_id = p.id
-         <if test="realName != null and realName != ''">
-             AND p.real_name LIKE CONCAT('%', ${realName}, '%')
-         </if>
-      GROUP BY p.id
-      ORDER BY p.real_name ASC
-    </select>
-
     <select id="count" resultType="java.lang.Long">
         SELECT COUNT(*)
-          FROM profile
+          FROM nine_lab_pitem
         <if test="params != null">
             <include refid="WHERE_SQL"/>
         </if>
