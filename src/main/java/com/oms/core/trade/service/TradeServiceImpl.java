@@ -7,6 +7,7 @@ import com.oms.core.profile.dao.ProfileDao;
 import com.oms.core.profile.entity.Profile;
 import com.oms.core.trade.consts.ExpressType;
 import com.oms.core.trade.consts.PayType;
+import com.oms.core.trade.consts.StatusType;
 import com.oms.core.trade.dao.LogisticsDao;
 import com.oms.core.trade.dao.OrderDao;
 import com.oms.core.trade.dao.TradeDao;
@@ -53,7 +54,7 @@ public class TradeServiceImpl implements TradeService{
     public Page<Trade> page(PageRequest pageRequest, String wxno, String tradeId, ExpressType express, PayType payType,
                             Long prepaidFee, Long price, Date minDateCreated, Date maxDateCreated, Date minAppointDeliveryTime,
                             Date maxAppointDeliveryTime, String contactName, String phone, String province, String city,
-                            String district, String sellerName, String wlnumber, String prodName){
+                            String district, String sellerName, String wlnumber, String prodName, StatusType status){
 
         Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -95,7 +96,8 @@ public class TradeServiceImpl implements TradeService{
                                          ObjectUtils.properties(logisticses, "id", Long.class),
                                          ObjectUtils.properties(profiles, "id", Long.class),
                                          ObjectUtils.properties(orders, "tradeId", String.class),
-                                         ObjectUtils.properties(products, "id", Long.class));
+                                         ObjectUtils.properties(products, "id", Long.class),
+                                         status);
 
         if(!page.getContent().isEmpty()){
             if(logisticses == null || logisticses.isEmpty()){

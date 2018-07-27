@@ -32,12 +32,12 @@ public class AchievementDao{
             criteria.and(Restrictions.eq("type", TradeType.CUSTOMIZE.getId()));
 
             if(minDateCreated != null){
-                minDateCreated = DateUtils.firstTimeOfDay(minDateCreated);
+                minDateCreated = DateUtils.firstTimeOfDate(minDateCreated);
 
                 criteria.and(Restrictions.ge("dateCreated", minDateCreated));
             }
             if(maxDateCreated != null){
-                maxDateCreated = DateUtils.lastTimeOfDay(maxDateCreated);
+                maxDateCreated = DateUtils.lastTimeOfDate(maxDateCreated);
 
                 criteria.and(Restrictions.le("dateCreated", maxDateCreated));
             }

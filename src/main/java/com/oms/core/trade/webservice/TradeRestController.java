@@ -1,7 +1,9 @@
 package com.oms.core.trade.webservice;
 
+import com.oms.commons.consts.CompanyInfo;
 import com.oms.core.trade.consts.ExpressType;
 import com.oms.core.trade.consts.PayType;
+import com.oms.core.trade.consts.StatusType;
 import com.oms.core.trade.entity.Trade;
 import com.oms.core.trade.service.TradeService;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.text.MessageFormat;
 import java.util.Date;
 
 @RestController
@@ -31,12 +34,12 @@ public class TradeRestController{
     public Responsed<Page<Trade>> page(Long pageNum, Long pageSize, String wxno, String tradeId, ExpressType express, PayType payType,
                                        Long prepaidFee, Long price, Date minDateCreated, Date maxDateCreated, Date minAppointDeliveryTime,
                                        Date maxAppointDeliveryTime, String contactName, String phone, String province, String city,
-                                       String district, String sellerName, String wlnumber, String prodName){
+                                       String district, String sellerName, String wlnumber, String prodName, StatusType status){
 
         PageRequest pageRequest = new PageRequest(pageNum, pageSize);
         Page<Trade> page = tradeService.page(pageRequest, wxno, tradeId, express, payType, prepaidFee, price, minDateCreated, maxDateCreated,
                                              minAppointDeliveryTime, maxAppointDeliveryTime, contactName, phone, province,
-                                             city, district, sellerName, wlnumber, prodName);
+                                             city, district, sellerName, wlnumber, prodName, status);
 
         return new Responsed<Page<Trade>>("查询成功", page);
     }
@@ -73,10 +76,12 @@ public class TradeRestController{
                        String district, String sellerName, String wlnumber, String prodName) throws Exception{
 
         XSSFWorkbook book = tradeService.export(wxno, tradeId, express, payType, prepaidFee, price, minDateCreated,
-                maxDateCreated, minAppointDeliveryTime, maxAppointDeliveryTime, contactName,
-                phone, province, city, district, sellerName, wlnumber, prodName);
+                                                maxDateCreated, minAppointDeliveryTime, maxAppointDeliveryTime, contactName,
+                                                phone, province, city, district, sellerName, wlnumber, prodName);
 
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("订单记录.xlsx", "UTF-8"));
+        String fileName = MessageFormat.format("{0}-订单记录.xlsx", CompanyInfo.COMPANY_NAME);
+
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
         response.setContentType("application/vnd.ms-excel;charset=UTF-8");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
@@ -98,7 +103,9 @@ public class TradeRestController{
         XSSFWorkbook book = tradeService.exportByAppointDeliveryTimeNull(wxno, tradeId, payType, sellerName, minDateCreated,
                                                                          maxDateCreated, contactName, phone);
 
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("等通知发货订单记录.xlsx", "UTF-8"));
+        String fileName = MessageFormat.format("{0}-等通知发货订单记录.xlsx", CompanyInfo.COMPANY_NAME);
+
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
         response.setContentType("application/vnd.ms-excel;charset=UTF-8");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
@@ -120,7 +127,9 @@ public class TradeRestController{
         XSSFWorkbook book = tradeService.exportByStatusFailAndUnusual(wxno, tradeId, payType, sellerName, minDateCreated,
                                                                       maxDateCreated, contactName, phone, wlnumber, express);
 
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("失败订单记录.xlsx", "UTF-8"));
+        String fileName = MessageFormat.format("{0}-失败订单记录.xlsx", CompanyInfo.COMPANY_NAME);
+
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
         response.setContentType("application/vnd.ms-excel;charset=UTF-8");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");

@@ -28,9 +28,9 @@ public class TradeServiceTest{
         PageRequest pageRequest = new PageRequest(1L, 20L);
 
         Page<Trade> page = tradeService.page(pageRequest, null, null, null, null, null,
-                                        null, null, null, null, null,
-                                  null, null, null, null, null, null, null,
-                                              null);
+                                             null, null, null, null, null,
+                                             null, null, null, null, null, null, null,
+                                             null, null);
 
         List<Trade> list = page.getContent();
         System.out.println(list.size());

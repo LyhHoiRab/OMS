@@ -21,8 +21,8 @@ import java.util.List;
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurationSupport{
 
-    private List<MediaType> SUPPORTED_MEDIA_TYPES = new ArrayList<MediaType>(Arrays.asList(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_HTML));
-    private Charset DEFAULT_CHARSET       = Charset.forName("UTF-8");
+    private List<MediaType> SUPPORTED_MEDIA_TYPES = Arrays.asList(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_HTML);
+    private Charset         DEFAULT_CHARSET       = Charset.forName("UTF-8");
 
     @Override
     public void addInterceptors(InterceptorRegistry registry){

@@ -27,24 +27,24 @@ public class AchievementServiceImpl implements AchievementService{
         Date now = new Date();
 
         //前天
-        Date beforeYesterdayMinDateCreated = DateUtils.addDays(DateUtils.firstTimeOfDay(now), -2);
-        Date beforeYesterdayMaxDateCreated = DateUtils.addDays(DateUtils.lastTimeOfDay(now), -2);
+        Date beforeYesterdayMinDateCreated = DateUtils.addDays(DateUtils.firstTimeOfDate(now), -2);
+        Date beforeYesterdayMaxDateCreated = DateUtils.addDays(DateUtils.lastTimeOfDate(now), -2);
         //统计
         Achievement beforeYesterday = achievementDao.achievement(beforeYesterdayMinDateCreated, beforeYesterdayMaxDateCreated);
         beforeYesterday.setTitle("前天");
         payTypeStatisticsDao.fill(beforeYesterday, beforeYesterdayMinDateCreated, beforeYesterdayMaxDateCreated);
 
         //昨天
-        Date yesterdayMinDateCreated = DateUtils.addDays(DateUtils.firstTimeOfDay(now), -1);
-        Date yesterdayMaxDateCreated = DateUtils.addDays(DateUtils.lastTimeOfDay(now), -1);
+        Date yesterdayMinDateCreated = DateUtils.addDays(DateUtils.firstTimeOfDate(now), -1);
+        Date yesterdayMaxDateCreated = DateUtils.addDays(DateUtils.lastTimeOfDate(now), -1);
         //统计
         Achievement yesterday = achievementDao.achievement(yesterdayMinDateCreated, yesterdayMaxDateCreated);
         yesterday.setTitle("昨天");
         payTypeStatisticsDao.fill(yesterday, yesterdayMinDateCreated, yesterdayMaxDateCreated);
 
         //今天
-        Date todayMinDateCreated = DateUtils.firstTimeOfDay(now);
-        Date todayMaxDateCreated = DateUtils.lastTimeOfDay(now);
+        Date todayMinDateCreated = DateUtils.firstTimeOfDate(now);
+        Date todayMaxDateCreated = DateUtils.lastTimeOfDate(now);
         //统计
         Achievement today = achievementDao.achievement(todayMinDateCreated, todayMaxDateCreated);
         today.setTitle("今天");

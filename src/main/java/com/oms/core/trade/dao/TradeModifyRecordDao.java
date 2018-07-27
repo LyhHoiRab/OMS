@@ -38,12 +38,12 @@ public class TradeModifyRecordDao{
                 criteria.and(Restrictions.like("tradeId", tradeId));
             }
             if(minOperateTime != null){
-                minOperateTime = DateUtils.firstTimeOfDay(minOperateTime);
+                minOperateTime = DateUtils.firstTimeOfDate(minOperateTime);
 
                 criteria.and(Restrictions.ge("operateTime", minOperateTime));
             }
             if(maxOperateTime != null){
-                maxOperateTime = DateUtils.lastTimeOfDay(maxOperateTime);
+                maxOperateTime = DateUtils.lastTimeOfDate(maxOperateTime);
 
                 criteria.and(Restrictions.le("operateTime", maxOperateTime));
             }

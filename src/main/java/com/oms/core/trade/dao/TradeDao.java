@@ -33,7 +33,7 @@ public class TradeDao{
     public Page<Trade> page(PageRequest pageRequest, String wxno, String tradeId, ExpressType express, PayType payType,
                             Long prepaidFee, Long price, Date minDateCreated, Date maxDateCreated, Date minAppointDeliveryTime,
                             Date maxAppointDeliveryTime, List<Long> consigneeIds, List<Long> sellers, List<String> tradeIds,
-                            List<Long> boxIds){
+                            List<Long> boxIds, StatusType status){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -61,22 +61,22 @@ public class TradeDao{
                 criteria.and(Restrictions.eq("price", price));
             }
             if(minDateCreated != null){
-                minDateCreated = DateUtils.firstTimeOfDay(minDateCreated);
+                minDateCreated = DateUtils.firstTimeOfDate(minDateCreated);
 
                 criteria.and(Restrictions.ge("dateCreated", minDateCreated));
             }
             if(maxDateCreated != null){
-                maxDateCreated = DateUtils.lastTimeOfDay(maxDateCreated);
+                maxDateCreated = DateUtils.lastTimeOfDate(maxDateCreated);
 
                 criteria.and(Restrictions.le("dateCreated", maxDateCreated));
             }
             if(minAppointDeliveryTime != null){
-                minAppointDeliveryTime = DateUtils.firstTimeOfDay(minAppointDeliveryTime);
+                minAppointDeliveryTime = DateUtils.firstTimeOfDate(minAppointDeliveryTime);
 
                 criteria.and(Restrictions.ge("appointDeliveryTime", minAppointDeliveryTime));
             }
             if(maxAppointDeliveryTime != null){
-                maxAppointDeliveryTime = DateUtils.lastTimeOfDay(maxAppointDeliveryTime);
+                maxAppointDeliveryTime = DateUtils.lastTimeOfDate(maxAppointDeliveryTime);
 
                 criteria.and(Restrictions.le("appointDeliveryTime", maxAppointDeliveryTime));
             }
@@ -91,6 +91,9 @@ public class TradeDao{
             }
             if(boxIds != null && !boxIds.isEmpty()){
                 criteria.and(Restrictions.in("mineScBoxId", boxIds));
+            }
+            if(status != null){
+                criteria.and(Restrictions.eq("status", status.getId()));
             }
 
             List<Trade> list  = mapper.find(criteria);
@@ -124,12 +127,12 @@ public class TradeDao{
                 criteria.and(Restrictions.like("tradeId", tradeId));
             }
             if(minDateCreated != null){
-                minDateCreated = DateUtils.firstTimeOfDay(minDateCreated);
+                minDateCreated = DateUtils.firstTimeOfDate(minDateCreated);
 
                 criteria.and(Restrictions.ge("dateCreated", minDateCreated));
             }
             if(maxDateCreated != null){
-                maxDateCreated = DateUtils.lastTimeOfDay(maxDateCreated);
+                maxDateCreated = DateUtils.lastTimeOfDate(maxDateCreated);
 
                 criteria.and(Restrictions.le("dateCreated", maxDateCreated));
             }
@@ -169,12 +172,12 @@ public class TradeDao{
                 criteria.and(Restrictions.like("tradeId", tradeId));
             }
             if(minDateCreated != null){
-                minDateCreated = DateUtils.firstTimeOfDay(minDateCreated);
+                minDateCreated = DateUtils.firstTimeOfDate(minDateCreated);
 
                 criteria.and(Restrictions.ge("dateCreated", minDateCreated));
             }
             if(maxDateCreated != null){
-                maxDateCreated = DateUtils.lastTimeOfDay(maxDateCreated);
+                maxDateCreated = DateUtils.lastTimeOfDate(maxDateCreated);
 
                 criteria.and(Restrictions.le("dateCreated", maxDateCreated));
             }
@@ -225,22 +228,22 @@ public class TradeDao{
                 criteria.and(Restrictions.eq("price", price));
             }
             if(minDateCreated != null){
-                minDateCreated = DateUtils.firstTimeOfDay(minDateCreated);
+                minDateCreated = DateUtils.firstTimeOfDate(minDateCreated);
 
                 criteria.and(Restrictions.ge("dateCreated", minDateCreated));
             }
             if(maxDateCreated != null){
-                maxDateCreated = DateUtils.lastTimeOfDay(maxDateCreated);
+                maxDateCreated = DateUtils.lastTimeOfDate(maxDateCreated);
 
                 criteria.and(Restrictions.le("dateCreated", maxDateCreated));
             }
             if(minAppointDeliveryTime != null){
-                minAppointDeliveryTime = DateUtils.firstTimeOfDay(minAppointDeliveryTime);
+                minAppointDeliveryTime = DateUtils.firstTimeOfDate(minAppointDeliveryTime);
 
                 criteria.and(Restrictions.ge("appointDeliveryTime", minAppointDeliveryTime));
             }
             if(maxAppointDeliveryTime != null){
-                maxAppointDeliveryTime = DateUtils.lastTimeOfDay(maxAppointDeliveryTime);
+                maxAppointDeliveryTime = DateUtils.lastTimeOfDate(maxAppointDeliveryTime);
 
                 criteria.and(Restrictions.le("appointDeliveryTime", maxAppointDeliveryTime));
             }
@@ -282,12 +285,12 @@ public class TradeDao{
                 criteria.and(Restrictions.like("tradeId", tradeId));
             }
             if(minDateCreated != null){
-                minDateCreated = DateUtils.firstTimeOfDay(minDateCreated);
+                minDateCreated = DateUtils.firstTimeOfDate(minDateCreated);
 
                 criteria.and(Restrictions.ge("dateCreated", minDateCreated));
             }
             if(maxDateCreated != null){
-                maxDateCreated = DateUtils.lastTimeOfDay(maxDateCreated);
+                maxDateCreated = DateUtils.lastTimeOfDate(maxDateCreated);
 
                 criteria.and(Restrictions.le("dateCreated", maxDateCreated));
             }
@@ -321,12 +324,12 @@ public class TradeDao{
                 criteria.and(Restrictions.like("tradeId", tradeId));
             }
             if(minDateCreated != null){
-                minDateCreated = DateUtils.firstTimeOfDay(minDateCreated);
+                minDateCreated = DateUtils.firstTimeOfDate(minDateCreated);
 
                 criteria.and(Restrictions.ge("dateCreated", minDateCreated));
             }
             if(maxDateCreated != null){
-                maxDateCreated = DateUtils.lastTimeOfDay(maxDateCreated);
+                maxDateCreated = DateUtils.lastTimeOfDate(maxDateCreated);
 
                 criteria.and(Restrictions.le("dateCreated", maxDateCreated));
             }
@@ -339,6 +342,23 @@ public class TradeDao{
             if(express != null){
                 criteria.and(Restrictions.eq("kdType", express.getId()));
             }
+
+            return mapper.find(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public List<Trade> findByIds(List<String> ids){
+        try{
+            Assert.notEmpty(ids, "订单ID列表不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.sort(Restrictions.desc("dateCreated"));
+
+            criteria.and(Restrictions.eq("type", TradeType.CUSTOMIZE.getId()));
+            criteria.and(Restrictions.in("id", ids));
 
             return mapper.find(criteria);
         }catch(Exception e){

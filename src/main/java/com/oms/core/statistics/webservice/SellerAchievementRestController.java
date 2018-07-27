@@ -1,5 +1,6 @@
 package com.oms.core.statistics.webservice;
 
+import com.oms.commons.consts.CompanyInfo;
 import com.oms.core.statistics.entity.SellerAchievement;
 import com.oms.core.statistics.service.SellerAchievementService;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +38,9 @@ public class SellerAchievementRestController{
 
         XSSFWorkbook book = sellerAchievementService.export(sellerName, minDateCreated, maxDateCreated);
 
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("销售业绩统计表.xlsx", "UTF-8"));
+        String fileName = MessageFormat.format("{0}-销售业绩统计表.xlsx", CompanyInfo.COMPANY_NAME);
+
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
         response.setContentType("application/vnd.ms-excel;charset=UTF-8");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
