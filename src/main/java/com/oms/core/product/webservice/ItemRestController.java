@@ -1,15 +1,21 @@
 package com.oms.core.product.webservice;
 
+import com.oms.commons.consts.ProductType;
 import com.oms.core.product.entity.Item;
 import com.oms.core.product.service.ItemService;
+import com.wah.doraemon.security.response.Responsed;
+import com.wah.doraemon.utils.Page;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.wah.doraemon.security.request.Page;
-import org.wah.doraemon.security.request.PageRequest;
-import org.wah.doraemon.security.response.Responsed;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 
 @RestController
 @RequestMapping(value = "/api/1.0/item")
@@ -19,12 +25,31 @@ public class ItemRestController{
     private ItemService itemService;
 
     @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<Item>> page(Long pageNum, Long pageSize, String itemCode, String itemName, Integer minNum,
-                                      Integer maxNum, Integer minSellNum, Integer maxSellNum){
-
-        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<Item> page = itemService.page(pageRequest, itemCode, itemName, minNum, maxNum, minSellNum, maxSellNum);
+    public Responsed<Page<Item>> page(Long pageNum, Long pageSize, String code, String name, String productName, ProductType type){
+        Page<Item> page = itemService.page(pageNum, pageSize, code, name, productName, type);
 
         return new Responsed<Page<Item>>("查询成功", page);
+    }
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed upload(MultipartFile file) throws Exception{
+        itemService.upload(file);
+
+        return new Responsed("导入成功");
+    }
+
+    @RequestMapping(value = "/export/template", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public void exportTemplate(HttpServletResponse response) throws Exception{
+        SXSSFWorkbook book = itemService.exportTemplate();
+
+        String filename = URLEncoder.encode("商品模版.xlsx", "UTF-8");
+
+        response.setHeader("Content-disposition", "attachment;filename=" + filename);
+        response.setContentType("application/octet-stream");
+
+        OutputStream output = response.getOutputStream();
+        book.write(output);
+
+        output.close();
     }
 }

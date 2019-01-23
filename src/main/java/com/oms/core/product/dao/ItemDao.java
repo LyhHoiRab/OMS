@@ -1,19 +1,23 @@
 package com.oms.core.product.dao;
 
+import com.oms.commons.consts.ProductType;
+import com.oms.commons.consts.helper.ProductTypeHelper;
 import com.oms.core.product.dao.mapper.ItemMapper;
 import com.oms.core.product.entity.Item;
+import com.wah.doraemon.security.exception.DataAccessException;
+import com.wah.doraemon.utils.IDUtils;
+import com.wah.doraemon.utils.Page;
+import com.wah.doraemon.utils.PageRequest;
+import com.wah.mybatis.helper.criteria.Criteria;
+import com.wah.mybatis.helper.criteria.Restrictions;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-import org.wah.doraemon.security.exception.DataAccessException;
-import org.wah.doraemon.security.request.Page;
-import org.wah.doraemon.security.request.PageRequest;
-import org.wah.doraemon.utils.mybatis.Criteria;
-import org.wah.doraemon.utils.mybatis.Restrictions;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -24,36 +28,81 @@ public class ItemDao{
     @Autowired
     private ItemMapper mapper;
 
-    public Page<Item> page(PageRequest pageRequest, String itemCode, String itemName, Integer minNum, Integer maxNum,
-                           Integer minSellNum, Integer maxSellNum){
+    public void saveList(List<Item> list){
+        try{
+            Assert.notEmpty(list, "商品列表不能为空");
+
+            final Date now = new Date();
+
+            for(Item item : list){
+                Assert.notNull(item, "商品信息不能为空");
+                Assert.hasText(item.getCode(), "商品编码不能为空");
+
+                item.setId(IDUtils.uuid32());
+                item.setSales(0);
+                item.setIsCheck(false);
+                item.setCreateTime(now);
+            }
+
+            mapper.saveList(list);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public void updateList(List<Item> list){
+        try{
+            Assert.notEmpty(list, "商品列表不能为空");
+
+            final Date now = new Date();
+
+            for(Item item : list){
+                Assert.notNull(item, "商品信息不能为空");
+                Assert.hasText(item.getCode(), "商品编码不能为空");
+
+                item.setUpdateTime(now);
+            }
+
+            mapper.updateList(list);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public List<Item> find(){
+        try{
+            return mapper.find(null);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public Page<Item> page(PageRequest pageRequest, String code, String name, String productName, ProductType type){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
             Criteria criteria = new Criteria();
-            criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
-            criteria.sort(Restrictions.desc("itemCode"));
+            criteria.limit(Restrictions.limit(pageRequest));
+            criteria.orderBy(Restrictions.asc("i.code"));
 
-            if(StringUtils.isNotBlank(itemCode)){
-                criteria.and(Restrictions.like("itemCode", itemCode));
+            if(StringUtils.isNotBlank(code)){
+                criteria.and(Restrictions.where("i.code").like(code));
             }
-            if(StringUtils.isNotBlank(itemName)){
-                criteria.and(Restrictions.like("itemName", itemName));
+            if(StringUtils.isNotBlank(name)){
+                criteria.and(Restrictions.where("i.name").like(name));
             }
-            if(minNum != null){
-                criteria.and(Restrictions.ge("num", minNum));
+            if(StringUtils.isNotBlank(productName)){
+                criteria.and(Restrictions.where("p.name").like(productName));
             }
-            if(maxNum != null){
-                criteria.and(Restrictions.le("num", maxNum));
-            }
-            if(minSellNum != null){
-                criteria.and(Restrictions.ge("sellNum", minSellNum));
-            }
-            if(maxSellNum != null){
-                criteria.and(Restrictions.le("sellNum", maxSellNum));
+            if(type != null){
+                criteria.and(Restrictions.where("p.type").eq(type, new ProductTypeHelper()));
             }
 
-            List<Item> list  = mapper.find(criteria);
-            Long       total = mapper.count(criteria);
+            List<Item> list  = mapper.findWithProduct(criteria);
+            Long       total = mapper.countWithProduct(criteria);
 
             return new Page<Item>(list, total, pageRequest);
         }catch(Exception e){
