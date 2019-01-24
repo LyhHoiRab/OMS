@@ -340,7 +340,7 @@
 
     <select id="get" resultMap="product">
         SELECT *
-          FROM prodcut
+          FROM product
         <if test="params != null">
             <include refid="WHERE_SQL"/>
         </if>

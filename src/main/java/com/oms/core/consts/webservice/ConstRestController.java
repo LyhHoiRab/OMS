@@ -25,4 +25,12 @@ public class ConstRestController{
 
         return new Responsed<Map<Object, Object>>("查询成功", select);
     }
+
+    @RequestMapping(value = "/customized", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @APIDoc(description = "查询产品定制类型键值对")
+    public Responsed<Map<Object, Object>> findCustomized(){
+        Map<Object, Object> select = constService.findCustomized();
+
+        return new Responsed<Map<Object, Object>>("查询成功", select);
+    }
 }

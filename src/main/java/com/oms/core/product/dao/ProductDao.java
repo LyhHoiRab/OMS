@@ -4,6 +4,8 @@ import com.oms.core.product.dao.mapper.ProductMapper;
 import com.oms.core.product.entity.Product;
 import com.wah.doraemon.security.exception.DataAccessException;
 import com.wah.doraemon.utils.IDUtils;
+import com.wah.mybatis.helper.criteria.Criteria;
+import com.wah.mybatis.helper.criteria.Restrictions;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +62,20 @@ public class ProductDao{
             }
 
             mapper.saveList(list);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public Product getById(String id){
+        try{
+            Assert.hasText(id, "产品ID不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.where("id").eq(id));
+
+            return mapper.get(criteria);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

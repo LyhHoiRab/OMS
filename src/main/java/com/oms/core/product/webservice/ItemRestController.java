@@ -1,6 +1,7 @@
 package com.oms.core.product.webservice;
 
 import com.oms.commons.consts.ProductType;
+import com.oms.commons.security.annotation.APIDoc;
 import com.oms.core.product.entity.Item;
 import com.oms.core.product.service.ItemService;
 import com.wah.doraemon.security.response.Responsed;
@@ -25,6 +26,7 @@ public class ItemRestController{
     private ItemService itemService;
 
     @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @APIDoc(description = "分页查询商品信息")
     public Responsed<Page<Item>> page(Long pageNum, Long pageSize, String code, String name, String productName, ProductType type){
         Page<Item> page = itemService.page(pageNum, pageSize, code, name, productName, type);
 
@@ -32,6 +34,7 @@ public class ItemRestController{
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @APIDoc(description = "商品信息导入")
     public Responsed upload(MultipartFile file) throws Exception{
         itemService.upload(file);
 
@@ -39,6 +42,7 @@ public class ItemRestController{
     }
 
     @RequestMapping(value = "/export/template", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @APIDoc(description = "商品模版导出")
     public void exportTemplate(HttpServletResponse response) throws Exception{
         SXSSFWorkbook book = itemService.exportTemplate();
 

@@ -27,6 +27,7 @@
 		<mybatis-helper.version>1.0.0</mybatis-helper.version>
 		<mybatis-spring-boot.version>1.3.2</mybatis-spring-boot.version>
 		<poi.version>4.0.1</poi.version>
+		<upyun.version>3.13</upyun.version>
 	</properties>
 
 	<dependencies>
@@ -112,6 +113,13 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>${poi.version}</version>
+		</dependency>
+
+		<!-- upyun -->
+		<dependency>
+			<groupId>com.upyun</groupId>
+			<artifactId>java-sdk</artifactId>
+			<version>${upyun.version}</version>
 		</dependency>
 
 		<!-- wah -->
