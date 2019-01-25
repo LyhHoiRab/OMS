@@ -102,7 +102,7 @@ public class ItemDao{
             }
 
             List<Item> list  = mapper.findWithProduct(criteria);
-            Long       total = mapper.countWithProduct(criteria);
+            long       total = mapper.countWithProduct(criteria);
 
             return new Page<Item>(list, total, pageRequest);
         }catch(Exception e){
