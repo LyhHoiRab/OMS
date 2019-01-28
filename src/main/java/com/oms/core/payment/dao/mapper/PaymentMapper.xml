@@ -200,7 +200,7 @@
         <id     column="id"          property="id"          javaType="java.lang.String"/>
         <result column="description" property="description" javaType="java.lang.String"/>
         <result column="image"       property="image"       javaType="java.lang.String"/>
-        <result column="status"      property="status"      typeHandler="UsingStateHandler"/>
+        <result column="status"      property="status"      typeHandler="UsingStatusHandler"/>
         <result column="create_time" property="createTime"  javaType="java.util.Date"/>
         <result column="update_time" property="updateTime"  javaType="java.util.Date"/>
     </resultMap>

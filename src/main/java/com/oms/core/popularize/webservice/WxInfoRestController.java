@@ -8,6 +8,7 @@ import com.wah.doraemon.utils.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(value = "/api/1.0/wxInfo")
@@ -15,6 +16,22 @@ public class WxInfoRestController{
 
     @Autowired
     private WxInfoService wxInfoService;
+
+    @RequestMapping(value = "/upload/image", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @APIDoc(description = "上传微信图片")
+    public Responsed<String> uploadImage(MultipartFile file) throws Exception{
+        String path = wxInfoService.uploadImage(file);
+
+        return new Responsed<String>("上传成功", path);
+    }
+
+    @RequestMapping(value = "/upload/qr", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @APIDoc(description = "上传微信二维码")
+    public Responsed<String> uploadQr(MultipartFile file) throws Exception{
+        String path = wxInfoService.uploadQr(file);
+
+        return new Responsed<String>("上传成功", path);
+    }
 
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @APIDoc(description = "新增微信")

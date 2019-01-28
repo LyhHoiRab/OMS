@@ -246,7 +246,7 @@
         )
     </insert>
 
-    <update id="save">
+    <update id="update">
         UPDATE report
          <set>
              <if test="name != null">

@@ -21,6 +21,6 @@ public class OMSApplication extends SpringBootServletInitializer{
     }
 
     public static void main(String[] args){
-        SpringApplication.run(OMSApplication.class,  args);
+        SpringApplication.run(OMSApplication.class, args);
     }
 }

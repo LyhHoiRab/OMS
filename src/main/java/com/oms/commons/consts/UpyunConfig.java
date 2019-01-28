@@ -21,4 +21,14 @@ public class UpyunConfig{
     public static final String getThumbnailDir(){
         return "/img/thumbnail/";
     }
+
+    //微信图片
+    public static final String getWxImageDir(){
+        return "/img/wx/";
+    }
+
+    //微信二维码
+    public static final String getWxQrDir(){
+        return "/img/wx/qr/";
+    }
 }
