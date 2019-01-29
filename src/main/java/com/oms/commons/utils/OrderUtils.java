@@ -1,7 +1,6 @@
 package com.oms.commons.utils;
 
 import com.wah.doraemon.security.exception.UtilsException;
-import com.wah.doraemon.utils.IDUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigInteger;
@@ -30,48 +29,5 @@ public class OrderUtils{
         String diString = String.valueOf(di);
 
         return (prefix + diString + id).replaceAll("-", "");
-    }
-
-    public static void main(String[] args){
-        Thread thread_1 = new Thread(new Runnable(){
-            @Override
-            public void run(){
-                System.out.println(createId(IDUtils.uuid32()));
-            }
-        });
-
-        Thread thread_2 = new Thread(new Runnable(){
-            @Override
-            public void run(){
-                System.out.println(createId(IDUtils.uuid32()));
-            }
-        });
-
-        Thread thread_3 = new Thread(new Runnable(){
-            @Override
-            public void run(){
-                System.out.println(createId(IDUtils.uuid32()));
-            }
-        });
-
-        Thread thread_4 = new Thread(new Runnable(){
-            @Override
-            public void run(){
-                System.out.println(createId(IDUtils.uuid32()));
-            }
-        });
-
-        Thread thread_5 = new Thread(new Runnable(){
-            @Override
-            public void run(){
-                System.out.println(createId(IDUtils.uuid32()));
-            }
-        });
-
-        thread_1.start();
-        thread_2.start();
-        thread_3.start();
-        thread_4.start();
-        thread_5.start();
     }
 }
