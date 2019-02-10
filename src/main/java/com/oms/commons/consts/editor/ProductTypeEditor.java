@@ -1,18 +1,18 @@
-package com.oms.commons.security.advice.editor;
+package com.oms.commons.consts.editor;
 
-import com.oms.commons.consts.Customized;
+import com.oms.commons.consts.ProductType;
 import org.apache.commons.lang3.StringUtils;
 
 import java.beans.PropertyEditorSupport;
 
-public class CustomizedEditor extends PropertyEditorSupport{
+public class ProductTypeEditor extends PropertyEditorSupport{
 
     @Override
     public void setAsText(String text) throws IllegalArgumentException{
         if(StringUtils.isNotBlank(text)){
             int id = Integer.parseInt(text);
 
-            setValue(Customized.getById(id));
+            setValue(ProductType.getById(id));
         }
     }
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.oms.core.permission.dao.mapper.RoleMapper">
+<mapper namespace="com.oms.core.account.dao.mapper.SalesMapper">
 
     <sql id="CONDITION_SQL">
         <if test="params != null">
@@ -196,119 +196,71 @@
         ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
     </sql>
 
-    <resultMap id="role" type="com.oms.core.permission.entity.Role">
+    <resultMap id="user" type="com.oms.core.account.entity.User">
         <id     column="id"          property="id"         javaType="java.lang.String"/>
-        <result column="name"        property="name"       javaType="java.lang.String"/>
-        <result column="is_system"   property="isSystem"   javaType="java.lang.Boolean"/>
-        <result column="status"      property="status"     typeHandler="UsingStatusHandler"/>
+        <result column="account_id"  property="accountId"  javaType="java.lang.String"/>
+        <result column="nickname"    property="nickname"   javaType="java.lang.String"/>
+        <result column="head_img"    property="headImg"    javaType="java.lang.String"/>
+        <result column="sex"         property="sex"        typeHandler="SexHandler"/>
         <result column="create_time" property="createTime" javaType="java.util.Date"/>
         <result column="update_time" property="updateTime" javaType="java.util.Date"/>
 
-        <association property="functions" resultMap="function" columnPrefix="f_"/>
+        <association property="account" resultMap="account" columnPrefix="a_"/>
     </resultMap>
 
-    <resultMap id="function" type="com.oms.core.permission.entity.Function">
-        <id     column="id"          property="id"          javaType="java.lang.String"/>
-        <result column="api"         property="api"         javaType="java.lang.String"/>
-        <result column="method"      property="method"      javaType="java.lang.String"/>
-        <result column="description" property="description" javaType="java.lang.String"/>
+    <resultMap id="account" type="com.oms.core.account.entity.Account">
+        <id     column="id"          property="id"         javaType="java.lang.String"/>
+        <result column="username"    property="username"   javaType="java.lang.String"/>
+        <result column="status"      property="status"     typeHandler="AccountStatusHandler"/>
     </resultMap>
 
-    <insert id="save">
-        INSERT
-          INTO role (
-               id,
-               name,
-               is_system,
-               status,
-               create_time
-        ) VALUE (
-               #{id,         jdbcType=VARCHAR},
-               #{name,       jdbcType=VARCHAR},
-               #{isSystem,   jdbcType=VARCHAR},
-               #{status,     typeHandler=UsingStatusHandler},
-               #{createTime, jdbcType=TIMESTAMP}
-        )
-    </insert>
-
-    <update id="update">
-        UPDATE role
-         <set>
-             <if test="name != null">
-                 name = #{name, jdbcType=VARCHAR},
-             </if>
-             <if test="status != null">
-                 status = #{status, typeHandler=UsingStatusHandler},
-             </if>
-             <if test="updateTime != null">
-                 update_time = #{updateTime, jdbcType=TIMESTAMP},
-             </if>
-         </set>
-          WHERE id = #{id}
+    <update id="updateStatus">
+        UPDATE account
+           SET status      = #{status, typeHandler=AccountStatusHandler},
+               update_time = NOW()
+         WHERE id IN
+        <foreach collection="accountIds" item="accountId" open="(" close=")" separator=",">
+            #{accountId}
+        </foreach>
     </update>
 
-    <insert id="grant">
-        INSERT
-          INTO role_function (
-               role_id,
-               function_id
-        ) VALUES
-      <foreach collection="functionIds" item="functionId" separator=",">
-        (
-                #{roleId,     jdbcType=VARCHAR},
-                #{functionId, jdbcType=VARCHAR}
-        )
-      </foreach>
-    </insert>
-
-    <delete id="revoke">
-        DELETE
-          FROM role_function
-         WHERE role_id = #{roleId}
-    </delete>
-
-    <select id="get" resultMap="role">
-        SELECT *
-          FROM role
+    <select id="get" resultMap="user">
+        SELECT u.*,
+               a.id       AS a_id,
+               a.username AS a_username,
+               a.status   AS a_status
+          FROM user u
+     LEFT JOIN role_account ra
+            ON ra.account_id = u.account_id
+     LEFT JOIN account a
+            ON a.id = u.account_id
         <if test="params != null">
             <include refid="WHERE_SQL"/>
         </if>
     </select>
 
-    <select id="find" resultMap="role">
-        SELECT *
-          FROM role
+    <select id="find" resultMap="user">
+        SELECT u.*,
+               a.id       AS a_id,
+               a.username AS a_username,
+               a.status   AS a_status
+          FROM user u
+     LEFT JOIN role_account ra
+            ON ra.account_id = u.account_id
+     LEFT JOIN account a
+            ON a.id = u.account_id
         <include refid="CONDITION_SQL"/>
     </select>
 
     <select id="count" resultType="java.lang.Long">
         SELECT COUNT(*)
-          FROM role
+          FROM user u
+     LEFT JOIN role_account ra
+            ON ra.account_id = u.account_id
+     LEFT JOIN account a
+            ON a.id = u.account_id
         <if test="params != null">
             <include refid="WHERE_SQL"/>
         </if>
-    </select>
-
-    <select id="findByAccountId" resultMap="role">
-        SELECT r.*
-          FROM role r,
-               role_account ra
-         WHERE r.id = ra.role_id
-           AND ra.account_id = #{accountId}
-           AND r.status      = TRUE
-    </select>
-
-    <select id="findWithFunctions" resultMap="role">
-        SELECT r.*,
-               f.id          AS f_id,
-               f.api         AS f_api,
-               f.method      AS f_method,
-               f.description AS f_description
-          FROM role r
-     LEFT JOIN role_function rf
-            ON rf.role_id = r.id
-     LEFT JOIN functions f
-            ON rf.function_id = f.id
-        <include refid="CONDITION_SQL"/>
     </select>
 </mapper>

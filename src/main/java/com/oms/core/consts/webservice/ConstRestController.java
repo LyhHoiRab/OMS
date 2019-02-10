@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,6 +31,30 @@ public class ConstRestController{
     @APIDoc(description = "查询产品定制类型键值对")
     public Responsed<Map<Object, Object>> findCustomized(){
         Map<Object, Object> select = constService.findCustomized();
+
+        return new Responsed<Map<Object, Object>>("查询成功", select);
+    }
+
+    @RequestMapping(value = "/accountStatus", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @APIDoc(description = "查询账户状态键值对")
+    public Responsed<Map<Object, Object>> findAccountStatus(){
+        Map<Object, Object> select = constService.findAccountStatus();
+
+        return new Responsed<Map<Object, Object>>("查询成功", select);
+    }
+
+    @RequestMapping(value = "/sex", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @APIDoc(description = "查询用户性别键值对")
+    public Responsed<Map<Object, Object>> findSex(){
+        Map<Object, Object> select = constService.findSex();
+
+        return new Responsed<Map<Object, Object>>("查询成功", select);
+    }
+
+    @RequestMapping(value = "/usingStatus", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @APIDoc(description = "查询可用状态键值对")
+    public Responsed<Map<Object, Object>> findUsingStatus(){
+        Map<Object, Object> select = constService.findUsingStatus();
 
         return new Responsed<Map<Object, Object>>("查询成功", select);
     }

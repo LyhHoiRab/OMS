@@ -1,18 +1,18 @@
-package com.oms.commons.security.advice.editor;
+package com.oms.commons.consts.editor;
 
-import com.wah.doraemon.domain.consts.UsingStatus;
+import com.oms.commons.consts.AccountStatus;
 import org.apache.commons.lang3.StringUtils;
 
 import java.beans.PropertyEditorSupport;
 
-public class UsingStatusEditor extends PropertyEditorSupport{
+public class AccountStatusEditor extends PropertyEditorSupport{
 
     @Override
     public void setAsText(String text) throws IllegalArgumentException{
         if(StringUtils.isNotBlank(text)){
             int id = Integer.parseInt(text);
 
-            setValue(UsingStatus.getById(id));
+            setValue(AccountStatus.getById(id));
         }
     }
 }

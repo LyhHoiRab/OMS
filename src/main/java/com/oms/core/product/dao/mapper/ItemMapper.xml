@@ -265,6 +265,38 @@
         </foreach>
     </update>
 
+    <update id="update">
+        UPDATE item
+         <set>
+            <if test="name != null">
+                name = #{name, jdbcType=VARCHAR},
+            </if>
+            <if test="sales != null">
+                sales = #{sales, jdbcType=INTEGER},
+            </if>
+            <if test="stock != null">
+                stock = #{stock, jdbcType=INTEGER},
+            </if>
+            <if test="isCheck != null">
+                is_check = #{isCheck, jdbcType=BOOLEAN},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime, jdbcType=TIMESTAMP},
+            </if>
+         </set>
+          WHERE id = #{id}
+    </update>
+
+    <update id="updateIsCheck">
+        UPDATE item
+           SET is_check    = #{isCheck},
+               update_time = NOW()
+         WHERE id IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
     <select id="get" resultMap="item">
         SELECT *
           FROM item

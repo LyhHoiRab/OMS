@@ -17,4 +17,6 @@ public interface FunctionMapper{
     void deleteList(List<Function> list);
 
     List<Function> find(@Param("params") Criteria criteria);
+
+    long count(@Param("params") Criteria criteria);
 }

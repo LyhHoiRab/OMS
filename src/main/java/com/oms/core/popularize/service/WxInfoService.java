@@ -16,5 +16,5 @@ public interface WxInfoService{
 
     WxInfo getById(String id);
 
-    Page<WxInfo> page(Long pageNum, Long pageSize, String wxno, String nickname, String phone, String remark);
+    Page<WxInfo> page(Long pageNum, Long pageSize, String wxno, String nickname, String phone, String remark, String sales);
 }

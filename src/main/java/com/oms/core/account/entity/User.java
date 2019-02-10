@@ -19,4 +19,6 @@ public class User extends Entity implements Createable, Updateable{
     private Sex    sex;
     private Date   createTime;
     private Date   updateTime;
+
+    private Account account;
 }

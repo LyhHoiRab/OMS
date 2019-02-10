@@ -59,8 +59,8 @@ public class WxInfoRestController{
 
     @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @APIDoc(description = "分页查询微信")
-    public Responsed<Page<WxInfo>> page(Long pageNum, Long pageSize, String wxno, String nickname, String phone, String remark){
-        Page<WxInfo> page = wxInfoService.page(pageNum, pageSize, wxno, nickname, phone, remark);
+    public Responsed<Page<WxInfo>> page(Long pageNum, Long pageSize, String wxno, String nickname, String phone, String remark, String sales){
+        Page<WxInfo> page = wxInfoService.page(pageNum, pageSize, wxno, nickname, phone, remark, sales);
 
         return new Responsed<Page<WxInfo>>("查询成功", page);
     }

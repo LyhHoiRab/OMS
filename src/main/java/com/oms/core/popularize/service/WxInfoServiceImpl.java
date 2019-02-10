@@ -92,9 +92,9 @@ public class WxInfoServiceImpl implements WxInfoService{
     }
 
     @Override
-    public Page<WxInfo> page(Long pageNum, Long pageSize, String wxno, String nickname, String phone, String remark){
+    public Page<WxInfo> page(Long pageNum, Long pageSize, String wxno, String nickname, String phone, String remark, String sales){
         PageRequest pageRequest = new PageRequest(pageNum, pageSize);
 
-        return wxInfoDao.page(pageRequest, wxno, nickname, phone, remark);
+        return wxInfoDao.page(pageRequest, wxno, nickname, phone, remark, sales);
     }
 }

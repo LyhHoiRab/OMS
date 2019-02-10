@@ -207,6 +207,14 @@
         <result column="qr"          property="qr"         javaType="java.lang.String"/>
         <result column="create_time" property="createTime" javaType="java.util.Date"/>
         <result column="update_time" property="updateTime" javaType="java.util.Date"/>
+
+        <association property="sales" resultMap="user" columnPrefix="s_"/>
+    </resultMap>
+
+    <resultMap id="user" type="com.oms.core.account.entity.User">
+        <id     column="id"          property="id"         javaType="java.lang.String"/>
+        <result column="account_id"  property="accountId"  javaType="java.lang.String"/>
+        <result column="nickname"    property="nickname"   javaType="java.lang.String"/>
     </resultMap>
 
     <insert id="save">
@@ -282,6 +290,27 @@
     <select id="count" resultType="java.lang.Long">
         SELECT COUNT(*)
           FROM wx_info
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+        </if>
+    </select>
+
+    <select id="findWithSales" resultMap="wxInfo">
+        SELECT w.*,
+               s.id         AS s_id,
+               s.account_id AS s_account_id,
+               s.nickname   AS s_nickname
+          FROM wx_info w
+     LEFT JOIN user s
+            ON s.account_id = w.account_id
+        <include refid="CONDITION_SQL"/>
+    </select>
+
+    <select id="countWithSales" resultType="java.lang.Long">
+        SELECT COUNT(*)
+          FROM wx_info w
+     LEFT JOIN user s
+            ON s.account_id = w.account_id
         <if test="params != null">
             <include refid="WHERE_SQL"/>
         </if>

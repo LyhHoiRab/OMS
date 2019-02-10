@@ -60,29 +60,32 @@ public class WxInfoDao{
         }
     }
 
-    public Page<WxInfo> page(PageRequest pageRequest, String wxno, String nickname, String phone, String remark){
+    public Page<WxInfo> page(PageRequest pageRequest, String wxno, String nickname, String phone, String remark, String sales){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
             Criteria criteria = new Criteria();
             criteria.limit(Restrictions.limit(pageRequest));
-            criteria.orderBy(Restrictions.desc("createTime"));
+            criteria.orderBy(Restrictions.desc("w.wxno"));
 
             if(StringUtils.isNotBlank(wxno)){
-                criteria.and(Restrictions.where("wxno").like(wxno));
+                criteria.and(Restrictions.where("w.wxno").like(wxno));
             }
             if(StringUtils.isNotBlank(nickname)){
-                criteria.and(Restrictions.where("nickname").like(nickname));
+                criteria.and(Restrictions.where("w.nickname").like(nickname));
             }
             if(StringUtils.isNotBlank(phone)){
-                criteria.and(Restrictions.where("phone").like(phone));
+                criteria.and(Restrictions.where("w.phone").like(phone));
             }
             if(StringUtils.isNotBlank(remark)){
-                criteria.and(Restrictions.where("remark").like(remark));
+                criteria.and(Restrictions.where("w.remark").like(remark));
+            }
+            if(StringUtils.isNotBlank(sales)){
+                criteria.and(Restrictions.where("s.nickname").like(sales));
             }
 
-            List<WxInfo> list  = mapper.find(criteria);
-            long         total = mapper.count(criteria);
+            List<WxInfo> list  = mapper.findWithSales(criteria);
+            long         total = mapper.countWithSales(criteria);
 
             return new Page<WxInfo>(list, total, pageRequest);
         }catch(Exception e){

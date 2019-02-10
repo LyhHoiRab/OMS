@@ -4,6 +4,9 @@ import com.google.common.collect.Lists;
 import com.oms.core.permission.dao.FunctionDao;
 import com.oms.core.permission.dao.RoleDao;
 import com.oms.core.permission.entity.Role;
+import com.wah.doraemon.domain.consts.UsingStatus;
+import com.wah.doraemon.utils.Page;
+import com.wah.doraemon.utils.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,5 +55,12 @@ public class RoleServiceImpl implements RoleService{
         }else{
             functionDao.cacheByRoleId(roleId, functionDao.findByIds(functionIds));
         }
+    }
+
+    @Override
+    public Page<Role> page(Long pageNum, Long pageSize, String name, Boolean isSystem, UsingStatus status){
+        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
+
+        return roleDao.page(pageRequest, name, isSystem, status);
     }
 }

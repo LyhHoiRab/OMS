@@ -1,9 +1,12 @@
 package com.oms.core.permission.dao;
 
+import com.oms.commons.consts.helper.UsingStatusHelper;
 import com.wah.doraemon.domain.consts.UsingStatus;
 import com.wah.doraemon.security.exception.DataAccessException;
 import com.wah.doraemon.utils.IDUtils;
 import com.wah.doraemon.utils.ObjectUtils;
+import com.wah.doraemon.utils.Page;
+import com.wah.doraemon.utils.PageRequest;
 import com.wah.mybatis.helper.criteria.Criteria;
 import com.wah.mybatis.helper.criteria.Restrictions;
 import com.oms.commons.consts.CacheName;
@@ -100,6 +103,34 @@ public class RoleDao{
     public List<Role> findWithFunctions(){
         try{
             return mapper.findWithFunctions(null);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public Page<Role> page(PageRequest pageRequest, String name, Boolean isSystem, UsingStatus status){
+        try{
+            Assert.notNull(pageRequest, "分页信息不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.limit(Restrictions.limit(pageRequest));
+            criteria.orderBy(Restrictions.asc("isSystem"));
+
+            if(StringUtils.isNotBlank(name)){
+                criteria.and(Restrictions.where("name").like(name));
+            }
+            if(isSystem != null){
+                criteria.and(Restrictions.where("isSystem").eq(isSystem));
+            }
+            if(status != null){
+                criteria.and(Restrictions.where("status").eq(status, new UsingStatusHelper()));
+            }
+
+            List<Role> list  = mapper.find(criteria);
+            long       total = mapper.count(criteria);
+
+            return new Page<Role>(list, total, pageRequest);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

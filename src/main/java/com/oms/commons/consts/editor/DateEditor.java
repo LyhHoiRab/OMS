@@ -1,4 +1,4 @@
-package com.oms.commons.security.advice.editor;
+package com.oms.commons.consts.editor;
 
 import com.wah.doraemon.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;

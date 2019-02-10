@@ -1,11 +1,9 @@
 package com.oms.commons.security.advice;
 
+import com.oms.commons.consts.AccountStatus;
 import com.oms.commons.consts.Customized;
 import com.oms.commons.consts.ProductType;
-import com.oms.commons.security.advice.editor.CustomizedEditor;
-import com.oms.commons.security.advice.editor.DateEditor;
-import com.oms.commons.security.advice.editor.ProductTypeEditor;
-import com.oms.commons.security.advice.editor.UsingStatusEditor;
+import com.oms.commons.consts.editor.*;
 import com.wah.doraemon.domain.consts.UsingStatus;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -34,5 +32,10 @@ public class EditorAdvice{
     @InitBinder
     public void initUsingStatusBinder(WebDataBinder binder){
         binder.registerCustomEditor(UsingStatus.class, new UsingStatusEditor());
+    }
+
+    @InitBinder
+    public void initAccountStatusBinder(WebDataBinder binder){
+        binder.registerCustomEditor(AccountStatus.class, new AccountStatusEditor());
     }
 }

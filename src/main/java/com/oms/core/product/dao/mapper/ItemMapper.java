@@ -14,6 +14,12 @@ public interface ItemMapper{
 
     void updateList(List<Item> list);
 
+    void update(Item item);
+
+    void updateIsCheck(@Param("ids") List<String> ids, @Param("isCheck") Boolean isCheck);
+
+    Item get(@Param("params") Criteria criteria);
+
     List<Item> find(@Param("params") Criteria criteria);
 
     long count(@Param("params") Criteria criteria);

@@ -71,6 +71,45 @@ public class ItemDao{
         }
     }
 
+    public void updateIsCheck(List<String> ids, Boolean isCheck){
+        try{
+            Assert.notEmpty(ids, "商品ID列表不能为空");
+            Assert.notNull(isCheck, "商品上架状态不能为空");
+
+            mapper.updateIsCheck(ids, isCheck);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public void update(Item item){
+        try{
+            Assert.notNull(item, "商品信息不能为空");
+            Assert.hasText(item.getId(), "商品ID不能为空");
+
+            item.setUpdateTime(new Date());
+            mapper.update(item);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public Item getById(String id){
+        try{
+            Assert.hasText(id, "商品ID不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.where("id").eq(id));
+
+            return mapper.get(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
     public List<Item> find(){
         try{
             return mapper.find(null);

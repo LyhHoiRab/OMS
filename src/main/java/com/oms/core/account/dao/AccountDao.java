@@ -33,10 +33,11 @@ public class AccountDao{
     public void saveOrUpdate(Account account){
         try{
             Assert.notNull(account, "账户信息不能为空");
-            Assert.hasText(account.getUsername(), "账户名不能为空");
-            Assert.hasText(account.getPassword(), "账户密码不能为空");
 
             if(StringUtils.isBlank(account.getId())){
+                Assert.hasText(account.getUsername(), "账户名不能为空");
+                Assert.hasText(account.getPassword(), "账户密码不能为空");
+
                 account.setId(IDUtils.uuid32());
                 account.setStatus(AccountStatus.NORMAL);
                 account.setCreateTime(new Date());

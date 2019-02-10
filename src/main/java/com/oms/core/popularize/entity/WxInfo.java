@@ -1,5 +1,6 @@
 package com.oms.core.popularize.entity;
 
+import com.oms.core.account.entity.User;
 import com.wah.doraemon.domain.Createable;
 import com.wah.doraemon.domain.Entity;
 import com.wah.doraemon.domain.Updateable;
@@ -21,4 +22,7 @@ public class WxInfo extends Entity implements Createable, Updateable{
     private String qr;
     private Date   createTime;
     private Date   updateTime;
+
+    //绑定的销售
+    private User sales;
 }

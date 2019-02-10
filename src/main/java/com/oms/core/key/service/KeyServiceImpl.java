@@ -14,7 +14,7 @@ public class KeyServiceImpl implements KeyService{
     @Autowired
     private KeyDao keyDao;
 
-//    @PostConstruct
+    @PostConstruct
     @Transactional
     @Override
     public void cache(){
@@ -22,5 +22,10 @@ public class KeyServiceImpl implements KeyService{
         keyDao.saveRSAPrivateKey();
         //RSA公钥
         keyDao.saveRSAPublicKey();
+    }
+
+    @Override
+    public String getRSAPublicKey(){
+        return keyDao.getRSAPublicKey();
     }
 }

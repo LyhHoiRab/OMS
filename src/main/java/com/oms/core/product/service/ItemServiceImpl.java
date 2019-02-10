@@ -8,6 +8,7 @@ import com.oms.core.product.dao.ItemDao;
 import com.oms.core.product.dao.ProductDao;
 import com.oms.core.product.entity.Item;
 import com.oms.core.product.entity.Product;
+import com.wah.doraemon.security.exception.DataNotFoundException;
 import com.wah.doraemon.utils.Page;
 import com.wah.doraemon.utils.PageRequest;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -34,11 +35,11 @@ public class ItemServiceImpl implements ItemService{
     public void upload(MultipartFile file) throws Exception{
         Assert.notNull(file, "导入的商品Excel文件不能为空");
 
-        List<Item> list        = ItemExcelUtils.upload(file);
-        List<Item> original    = itemDao.find();
-        List<Item> saveList    = Lists.newArrayList();
-        List<Item> updateList  = Lists.newArrayList();
-        List<Product> products = Lists.newArrayList();
+        List<Item>    list       = ItemExcelUtils.upload(file);
+        List<Item>    original   = itemDao.find();
+        List<Item>    saveList   = Lists.newArrayList();
+        List<Item>    updateList = Lists.newArrayList();
+        List<Product> products   = Lists.newArrayList();
 
         if(!list.isEmpty()){
             for(Item item : list){
@@ -50,7 +51,7 @@ public class ItemServiceImpl implements ItemService{
                     //创建产品
                     Product product = new Product();
                     product.setCode(item.getCode());
-                    product.setCustomized(Customized.PRIVACY_CARE);
+                    product.setCustomized(Customized.SKIN_CARE);
                     product.setType(ProductType.OTHER);
                     product.setName(item.getName());
                     product.setPrice(0d);
@@ -68,6 +69,30 @@ public class ItemServiceImpl implements ItemService{
         if(!products.isEmpty()){
             productDao.saveList(products);
         }
+    }
+
+    @Transactional
+    @Override
+    public void updateIsCheck(List<String> ids, Boolean isCheck){
+        Assert.notEmpty(ids, "商品ID列表不能为空");
+        Assert.notNull(isCheck, "商品上架状态不能为空");
+
+        itemDao.updateIsCheck(ids, isCheck);
+    }
+
+    @Transactional
+    @Override
+    public void updateStock(String id, Integer stock){
+        Assert.hasText(id, "商品ID不能为空");
+        Assert.notNull(stock, "商品库存不能为空");
+
+        Item item = itemDao.getById(id);
+        if(item == null){
+            throw new DataNotFoundException("没有该商品信息");
+        }
+
+        item.setStock(stock);
+        itemDao.update(item);
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.wah.doraemon.utils.Page;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/1.0/item")
@@ -31,6 +33,22 @@ public class ItemRestController{
         Page<Item> page = itemService.page(pageNum, pageSize, code, name, productName, type);
 
         return new Responsed<Page<Item>>("查询成功", page);
+    }
+
+    @RequestMapping(value = "/isCheck", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @APIDoc(description = "批量修改商品上架状态")
+    public Responsed updateIsCheck(@RequestBody List<String> ids, Boolean isCheck){
+        itemService.updateIsCheck(ids, isCheck);
+
+        return new Responsed("操作成功");
+    }
+
+    @RequestMapping(value = "/stock", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @APIDoc(description = "修改商品库存")
+    public Responsed updateStock(String id, Integer stock){
+        itemService.updateStock(id, stock);
+
+        return new Responsed("修改成功");
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

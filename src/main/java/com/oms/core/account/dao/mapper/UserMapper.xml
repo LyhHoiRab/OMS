@@ -228,6 +228,9 @@
     <update id="update">
         UPDATE user
          <set>
+             <if test="nickname != null">
+                 nickname = #{nickname, jdbcType=VARCHAR},
+             </if>
              <if test="headImg != null">
                  head_img = #{headImg, jdbcType=VARCHAR},
              </if>

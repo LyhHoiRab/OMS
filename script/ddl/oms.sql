@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   INDEX(`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `function` (
+CREATE TABLE IF NOT EXISTS `functions` (
   `id`          varchar(32) NOT NULL,
   `api`         varchar(50) NOT NULL,
   `method`      varchar(8)  NOT NULL,
@@ -106,4 +106,19 @@ CREATE TABLE IF NOT EXISTS `product` (
   `update_time`   datetime     DEFAULT NULL,
   PRIMARY KEY(`id`),
   UNIQUE INDEX(`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `wx_info` (
+  `id`          varchar(32)  NOT NULL,
+  `account_id`  varchar(32)  DEFAULT NULL,
+  `wxno`        varchar(40)  NOT NULL,
+  `nickname`    varchar(40)  DEFAULT NULL,
+  `phone`       varchar(20)  DEFAULT NULL,
+  `remark`      varchar(40)  DEFAULT NULL,
+  `image`       text         DEFAULT NULL,
+  `qr`          text         DEFAULT NULL,
+  `create_time` datetime     NOT NULL,
+  `update_time` datetime     DEFAULT NULL,
+  PRIMARY KEY(`id`),
+  UNIQUE INDEX(`wxno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

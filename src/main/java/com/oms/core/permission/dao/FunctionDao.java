@@ -1,15 +1,18 @@
 package com.oms.core.permission.dao;
 
 import com.google.common.collect.Lists;
+import com.oms.commons.security.annotation.APIDoc;
 import com.wah.doraemon.security.exception.DataAccessException;
 import com.wah.doraemon.utils.IDUtils;
+import com.wah.doraemon.utils.Page;
+import com.wah.doraemon.utils.PageRequest;
 import com.wah.mybatis.helper.criteria.Criteria;
 import com.wah.mybatis.helper.criteria.Restrictions;
 import com.oms.commons.consts.CacheName;
-import com.oms.commons.security.annotation.APIDoc;
 import com.oms.commons.utils.ApplicationContextHolder;
 import com.oms.core.permission.dao.mapper.FunctionMapper;
 import com.oms.core.permission.entity.Function;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,7 +137,7 @@ public class FunctionDao{
                         RequestMapping methodMapping = method.getAnnotation(RequestMapping.class);
 
                         if(methodMapping != null){
-                            APIDoc          doc            = method.getAnnotation(APIDoc.class);
+                            APIDoc doc            = method.getAnnotation(APIDoc.class);
                             String          description    = doc.description();
                             String[]        methodApis     = methodMapping.value();
                             RequestMethod[] requestMethods = methodMapping.method();
@@ -177,6 +180,40 @@ public class FunctionDao{
         }
     }
 
+    public Page<Function> page(PageRequest pageRequest, String api, String method, Boolean allocatable, Boolean granted, Boolean cookie){
+        try{
+            Assert.notNull(pageRequest, "分页信息不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.limit(Restrictions.limit(pageRequest));
+            criteria.orderBy(Restrictions.asc("api"));
+
+            if(StringUtils.isNotBlank(api)){
+                criteria.and(Restrictions.where("api").like(api));
+            }
+            if(StringUtils.isNotBlank(method)){
+                criteria.and(Restrictions.where("method").eq(method));
+            }
+            if(allocatable != null){
+                criteria.and(Restrictions.where("allocatable").eq(allocatable));
+            }
+            if(granted != null){
+                criteria.and(Restrictions.where("granted").eq(granted));
+            }
+            if(cookie != null){
+                criteria.and(Restrictions.where("cookie").eq(cookie));
+            }
+
+            List<Function> list  = mapper.find(criteria);
+            long           total = mapper.count(criteria);
+
+            return new Page<Function>(list, total, pageRequest);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
     public Boolean needNotCookieByCache(String api, String method){
         try{
             Assert.hasText(api, "API不能为空");
@@ -209,13 +246,15 @@ public class FunctionDao{
             //查询
             List<Function> list = mapper.find(criteria);
 
-            //添加到缓存
-            List<String> caches = Lists.newArrayList();
-            for(Function function : list){
-               caches.add(function.getApi() + "_" + function.getMethod());
-            }
+            if(!list.isEmpty()){
+                //添加到缓存
+                List<String> caches = Lists.newArrayList();
+                for(Function function : list){
+                    caches.add(function.getApi() + "_" + function.getMethod());
+                }
 
-            template.opsForSet().add(CacheName.PERMISSION_NEED_NOT_COOKIE, caches.toArray(new String[caches.size()]));
+                template.opsForSet().add(CacheName.PERMISSION_NEED_NOT_COOKIE, caches.toArray(new String[caches.size()]));
+            }
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);
@@ -230,13 +269,15 @@ public class FunctionDao{
             //查询
             List<Function> list = mapper.find(criteria);
 
-            //添加到缓存
-            List<String> caches = Lists.newArrayList();
-            for(Function function : list){
-                caches.add(function.getApi() + "_" + function.getMethod());
-            }
+            if(!list.isEmpty()){
+                //添加到缓存
+                List<String> caches = Lists.newArrayList();
+                for(Function function : list){
+                    caches.add(function.getApi() + "_" + function.getMethod());
+                }
 
-            template.opsForSet().add(CacheName.PERMISSION_NEED_NOT_GRANTED, caches.toArray(new String[caches.size()]));
+                template.opsForSet().add(CacheName.PERMISSION_NEED_NOT_GRANTED, caches.toArray(new String[caches.size()]));
+            }
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

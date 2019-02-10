@@ -210,7 +210,7 @@
 
     <insert id="saveList">
         INSERT
-          INTO function (
+          INTO functions (
                id,
                api,
                method,
@@ -236,7 +236,7 @@
 
     <update id="updateList">
         <foreach collection="list" item="function" separator=";">
-            UPDATE function
+            UPDATE functions
              <set>
                  <if test="function.description != null">
                      description = #{function.description, jdbcType=VARCHAR},
@@ -261,7 +261,7 @@
 
     <delete id="deleteList">
         DELETE
-          FROM function
+          FROM functions
          WHERE id IN (
           <foreach collection="list" item="function" separator=",">
               #{function.id}
@@ -271,7 +271,15 @@
 
     <select id="find" resultMap="function">
         SELECT *
-          FROM function
+          FROM functions
         <include refid="CONDITION_SQL"/>
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        SELECT COUNT(*)
+          FROM functions
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+        </if>
     </select>
 </mapper>

@@ -5,6 +5,8 @@ import com.oms.core.permission.dao.FunctionDao;
 import com.oms.core.permission.dao.RoleDao;
 import com.oms.core.permission.entity.Function;
 import com.oms.core.permission.entity.Role;
+import com.wah.doraemon.utils.Page;
+import com.wah.doraemon.utils.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +24,7 @@ public class FunctionServiceImpl implements FunctionService{
     @Autowired
     private RoleDao roleDao;
 
-//    @PostConstruct
+    @PostConstruct
     @Transactional
     @Override
     public void sync(){
@@ -76,5 +78,12 @@ public class FunctionServiceImpl implements FunctionService{
         for(Role role : roles){
             functionDao.cacheByRoleId(role.getId(), role.getFunctions());
         }
+    }
+
+    @Override
+    public Page<Function> page(Long pageNum, Long pageSize, String api, String method, Boolean allocatable, Boolean granted, Boolean cookie){
+        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
+
+        return functionDao.page(pageRequest, api, method, allocatable, granted, cookie);
     }
 }

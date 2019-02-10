@@ -12,19 +12,20 @@ public enum AccountStatus{
 
     //正常
     @SerializedName("0")
-    NORMAL(0),
+    NORMAL(0, "正常"),
 
     //锁定
     @SerializedName("1")
-    LOCKED(1),
+    LOCKED(1, "锁定"),
 
     //冻结
     @SerializedName("2")
-    FROZEN(2),
+    FROZEN(2, "冻结"),
 
     ;
 
     private int id;
+    private String description;
 
     public static AccountStatus getById(int id){
         for(AccountStatus status : AccountStatus.values()){

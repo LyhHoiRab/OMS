@@ -19,4 +19,8 @@ public interface WxInfoMapper{
     List<WxInfo> find(@Param("params") Criteria criteria);
 
     long count(@Param("params") Criteria criteria);
+
+    List<WxInfo> findWithSales(@Param("params") Criteria criteria);
+
+    long countWithSales(@Param("params") Criteria criteria);
 }
