@@ -122,3 +122,28 @@ CREATE TABLE IF NOT EXISTS `wx_info` (
   PRIMARY KEY(`id`),
   UNIQUE INDEX(`wxno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `client` (
+ `id`          varchar(32)  NOT NULL,
+ `account_id`  varchar(32)  NOT NULL,
+ `wxno`        varchar(40)  NOT NULL,
+ `name`        varchar(40)  DEFAULT NULL,
+ `remark`      varchar(40)  DEFAULT NULL,
+ `head_img`    text         DEFAULT NULL,
+ `sex`         tinyint(1)   NOT NULL,
+ `create_time` datetime     NOT NULL,
+ `update_time` datetime     DEFAULT NULL,
+ PRIMARY KEY(`id`),
+ INDEX(`wxno`),
+ INDEX(`account_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `payment` (
+  `id`          varchar(32)  NOT NULL,
+  `description` text         DEFAULT NULL,
+  `image`       text         DEFAULT NULL,
+  `status`      tinyint(1)   NOT NULL,
+  `create_time` datetime     NOT NULL,
+  `update_time` datetime     DEFAULT NULL,
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
