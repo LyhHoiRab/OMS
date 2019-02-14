@@ -14,6 +14,8 @@ public interface AddressMapper{
 
     void update(Address address);
 
+    void updateIsDefault(@Param("isDefault") Boolean isDefault, @Param("params") Criteria criteria);
+
     Address get(@Param("params") Criteria criteria);
 
     List<Address> find(@Param("params") Criteria criteria);

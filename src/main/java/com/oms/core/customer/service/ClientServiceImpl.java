@@ -48,4 +48,11 @@ public class ClientServiceImpl implements ClientService{
     public List<Client> find(String accountId, String name, String wxno, String remark){
         return clientDao.find(accountId, name, wxno, remark);
     }
+
+    @Override
+    public Client getById(String id){
+        Assert.hasText(id, "客户ID不能为空");
+
+        return clientDao.getById(id);
+    }
 }

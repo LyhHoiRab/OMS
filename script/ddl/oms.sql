@@ -147,3 +147,38 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `update_time` datetime     DEFAULT NULL,
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `address` (
+  `id`          varchar(32)  NOT NULL,
+  `client_id`   varchar(32)  NOT NULL,
+  `is_default`  tinyint(1)   DEFAULT '0',
+  `country`     varchar(10)  NOT NULL,
+  `province`    varchar(20)  NOT NULL,
+  `city`        varchar(20)  NOT NULL,
+  `region`      varchar(20)  DEFAULT NULL,
+  `detail`      text         DEFAULT NULL,
+  `phone`       varchar(20)  NOT NULL,
+  `contact`     varchar(20)  NOT NULL,
+  `create_time` datetime     NOT NULL,
+  `update_time` datetime     DEFAULT NULL,
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `report` (
+  `id`          varchar(32)  NOT NULL,
+  `client_id`   varchar(32)  NOT NULL,
+  `name`        varchar(20)  DEFAULT NULL,
+  `sex`         tinyint(1)   DEFAULT '0',
+  `age`         varchar(3)   DEFAULT NULL,
+  `weight`      varchar(3)   DEFAULT NULL,
+  `height`      varchar(3)   DEFAULT NULL,
+  `phone`       varchar(20)  DEFAULT NULL,
+  `remark`      varchar(20)  DEFAULT NULL,
+  `image`       text         DEFAULT NULL,
+  `proposal`    text         DEFAULT NULL,
+  `analysis`    text         DEFAULT NULL,
+  `problem`     text         DEFAULT NULL,
+  `create_time` datetime     NOT NULL,
+  `update_time` datetime     DEFAULT NULL,
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

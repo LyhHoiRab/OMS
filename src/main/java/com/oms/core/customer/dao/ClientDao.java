@@ -101,6 +101,20 @@ public class ClientDao{
         }
     }
 
+    public Client getById(String id){
+        try{
+            Assert.hasText(id, "客户ID不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.where("id").eq(id));
+
+            return mapper.get(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
     public boolean existByAccountIdAndWxno(String accountId, String wxno){
         try{
             Assert.hasText(accountId, "关联的账户ID不能为空");

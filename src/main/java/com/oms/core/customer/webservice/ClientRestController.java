@@ -7,10 +7,7 @@ import com.oms.core.customer.service.ClientService;
 import com.wah.doraemon.security.response.Responsed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -57,5 +54,13 @@ public class ClientRestController{
         List<Client> list      = clientService.find(accountId, name, wxno, remark);
 
         return new Responsed<List<Client>>("查询成功", list);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @APIDoc(description = "根据ID查询客户信息")
+    public Responsed<Client> getById(@PathVariable("id") String id){
+        Client client = clientService.getById(id);
+
+        return new Responsed<Client>("查询成功", client);
     }
 }

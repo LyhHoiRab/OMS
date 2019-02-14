@@ -19,6 +19,8 @@ public class Address extends Entity implements Createable, Updateable{
     private String  city;
     private String  region;
     private String  detail;
+    private String  phone;
+    private String  contact;
     private Date    createTime;
     private Date    updateTime;
 }

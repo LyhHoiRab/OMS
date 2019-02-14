@@ -13,4 +13,6 @@ public interface ClientService{
     boolean existByAccountIdAndWxno(String accountId, String wxno);
 
     List<Client> find(String accountId, String name, String wxno, String remark);
+
+    Client getById(String id);
 }

@@ -21,6 +21,7 @@ public class Report extends Entity implements Createable, Updateable{
     private Integer height;
     private String  phone;
     private String  remark;
+    private String  image;
     //建议
     private String  proposal;
     //分析

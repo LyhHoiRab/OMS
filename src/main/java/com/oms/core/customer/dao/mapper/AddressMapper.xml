@@ -205,6 +205,8 @@
         <result column="city"        property="city"       javaType="java.lang.String"/>
         <result column="region"      property="region"     javaType="java.lang.String"/>
         <result column="detail"      property="detail"     javaType="java.lang.String"/>
+        <result column="phone"       property="phone"      javaType="java.lang.String"/>
+        <result column="contact"     property="contact"    javaType="java.lang.String"/>
         <result column="create_time" property="createTime" javaType="java.util.Date"/>
         <result column="update_time" property="updateTime" javaType="java.util.Date"/>
     </resultMap>
@@ -220,6 +222,8 @@
                city,
                region,
                detail,
+               phone,
+               contact,
                create_time
         ) VALUE (
                #{id,         jdbcType=VARCHAR},
@@ -230,6 +234,8 @@
                #{city,       jdbcType=VARCHAR},
                #{region,     jdbcType=VARCHAR},
                #{detail,     jdbcType=VARCHAR},
+               #{phone,      jdbcType=VARCHAR},
+               #{contact,    jdbcType=VARCHAR},
                #{createTime, jdbcType=TIMESTAMP}
         )
     </insert>
@@ -255,11 +261,24 @@
              <if test="detail != null and detail != ''">
                  detail = #{detail, jdbcType=VARCHAR},
              </if>
+             <if test="phone != null and phone != ''">
+                 phone = #{phone, jdbcType=VARCHAR},
+             </if>
+             <if test="contact != null and contact != ''">
+                 contact = #{contact, jdbcType=VARCHAR},
+             </if>
              <if test="updateTime != null">
                  update_time = #{updateTime, jdbcType=TIMESTAMP},
              </if>
          </set>
           WHERE id = #{id}
+    </update>
+
+    <update id="updateIsDefault">
+        UPDATE address
+           SET is_default  = #{isDefault,  jdbcType=BOOLEAN},
+               update_time = NOW()
+        <include refid="CONDITION_SQL"/>
     </update>
 
     <select id="get" resultMap="address">

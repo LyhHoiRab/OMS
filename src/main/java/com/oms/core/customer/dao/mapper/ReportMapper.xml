@@ -206,6 +206,7 @@
         <result column="height"      property="height"     javaType="java.lang.Integer"/>
         <result column="phone"       property="phone"      javaType="java.lang.String"/>
         <result column="remark"      property="remark"     javaType="java.lang.String"/>
+        <result column="image"       property="image"      javaType="java.lang.String"/>
         <result column="proposal"    property="proposal"   javaType="java.lang.String"/>
         <result column="analysis"    property="analysis"   javaType="java.lang.String"/>
         <result column="problem"     property="problem"    javaType="java.lang.String"/>
@@ -225,6 +226,7 @@
                height,
                phone,
                remark,
+               image,
                proposal,
                analysis,
                problem,
@@ -239,6 +241,7 @@
                #{height,     jdbcType=INTEGER},
                #{phone,      jdbcType=VARCHAR},
                #{remark,     jdbcType=VARCHAR},
+               #{image,      jdbcType=VARCHAR},
                #{proposal,   jdbcType=VARCHAR},
                #{analysis,   jdbcType=VARCHAR},
                #{problem,    jdbcType=VARCHAR},
@@ -269,6 +272,9 @@
              </if>
              <if test="remark != null">
                  remark = #{remark, jdbcType=VARCHAR},
+             </if>
+             <if test="image != null">
+                 image = #{image, jdbcType=VARCHAR},
              </if>
              <if test="proposal != null">
                  proposal = #{proposal, jdbcType=VARCHAR},
