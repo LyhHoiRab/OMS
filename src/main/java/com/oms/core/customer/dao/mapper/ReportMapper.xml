@@ -199,6 +199,7 @@
     <resultMap id="report" type="com.oms.core.customer.entity.Report">
         <id     column="id"          property="id"         javaType="java.lang.String"/>
         <result column="client_id"   property="clientId"   javaType="java.lang.String"/>
+        <result column="title"       property="title"      javaType="java.lang.String"/>
         <result column="name"        property="name"       javaType="java.lang.String"/>
         <result column="sex"         property="sex"        typeHandler="SexHandler"/>
         <result column="age"         property="age"        javaType="java.lang.Integer"/>
@@ -219,6 +220,7 @@
           INTO report (
                id,
                client_id,
+               title,
                name,
                sex,
                age,
@@ -234,6 +236,7 @@
         ) VALUE (
                #{id,         jdbcType=VARCHAR},
                #{clientId,   jdbcType=VARCHAR},
+               #{title,      jdbcType=VARCHAR},
                #{name,       jdbcType=VARCHAR},
                #{sex,        typeHandler=SexHandler},
                #{age,        jdbcType=INTEGER},
@@ -252,6 +255,9 @@
     <update id="update">
         UPDATE report
          <set>
+             <if test="title != null">
+                 title = #{title, jdbcType=VARCHAR},
+             </if>
              <if test="name != null">
                  name = #{name, jdbcType=VARCHAR},
              </if>

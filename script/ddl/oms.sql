@@ -161,12 +161,14 @@ CREATE TABLE IF NOT EXISTS `address` (
   `contact`     varchar(20)  NOT NULL,
   `create_time` datetime     NOT NULL,
   `update_time` datetime     DEFAULT NULL,
-  PRIMARY KEY(`id`)
+  PRIMARY KEY(`id`),
+  INDEX(`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `report` (
   `id`          varchar(32)  NOT NULL,
   `client_id`   varchar(32)  NOT NULL,
+  `title`       text         DEFAULT NULL,
   `name`        varchar(20)  DEFAULT NULL,
   `sex`         tinyint(1)   DEFAULT '0',
   `age`         varchar(3)   DEFAULT NULL,
@@ -180,5 +182,6 @@ CREATE TABLE IF NOT EXISTS `report` (
   `problem`     text         DEFAULT NULL,
   `create_time` datetime     NOT NULL,
   `update_time` datetime     DEFAULT NULL,
-  PRIMARY KEY(`id`)
+  PRIMARY KEY(`id`),
+  INDEX(`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

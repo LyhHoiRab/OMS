@@ -14,6 +14,7 @@ import java.util.Date;
 public class Report extends Entity implements Createable, Updateable{
 
     private String  clientId;
+    private String  title;
     private String  name;
     private Sex     sex;
     private Integer age;
